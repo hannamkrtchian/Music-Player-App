@@ -1,18 +1,17 @@
 package com.example.musicplayerapp
 
 import android.content.pm.PackageManager
-import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
@@ -31,7 +30,9 @@ class MainActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main)
+        val navController = navHostFragment?.findNavController()
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
@@ -39,12 +40,16 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
             )
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        if (navController != null) {
+            setupActionBarWithNavController(navController, appBarConfiguration)
+        }
+        if (navController != null) {
+            navView.setupWithNavController(navController)
+        }
 
         // get the recyclerview with the songs and the textview with "no songs"
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view_all_songs)
-        val textView = findViewById<TextView>(R.id.no_songs)
+        //val recyclerView = findViewById<RecyclerView>(R.id.recycler_view_all_songs)
+        //val textView = findViewById<TextView>(R.id.no_songs)
 
         // check API level to declare permission
         val permission: String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
