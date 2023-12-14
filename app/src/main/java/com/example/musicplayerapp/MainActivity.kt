@@ -1,12 +1,22 @@
 package com.example.musicplayerapp
 
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.example.musicplayerapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -31,5 +41,42 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        // get the recyclerview with the songs and the textview with "no songs"
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view_all_songs)
+        val textView = findViewById<TextView>(R.id.no_songs)
+
+        // check API level to declare permission
+        val permission: String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // For devices with API 33 (Tiramisu) and higher, use READ_MEDIA_AUDIO
+            android.Manifest.permission.READ_MEDIA_AUDIO
+        } else {
+            // For devices with API levels between 24 and 32, use READ_EXTERNAL_STORAGE
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+
+        // check and request permission
+        if (!checkPermission(permission)) {
+            requestPermission(permission)
+            return
+        }
+    }
+
+    private fun checkPermission(permission: String): Boolean {
+        // Check permission
+        val result = ContextCompat.checkSelfPermission(this, permission)
+        // Return true or false
+        return result == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestPermission(permission: String) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+            Toast.makeText(this,
+                "Permission is required to access music library, please allow from settings.",
+                Toast.LENGTH_SHORT).show()
+        } else {
+            // Request permission
+            ActivityCompat.requestPermissions(this, arrayOf(permission), 123)
+        }
     }
 }
