@@ -1,9 +1,11 @@
 package com.example.musicplayerapp
 
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -15,8 +17,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicplayerapp.databinding.ActivityMainBinding
+import com.example.musicplayerapp.ui.AudioModel
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,11 +52,14 @@ class MainActivity : AppCompatActivity() {
             navView.setupWithNavController(navController)
         }
 
-        // get the recyclerview with the songs and the textview with "no songs"
-        //val recyclerView = findViewById<RecyclerView>(R.id.recycler_view_all_songs)
-        //val textView = findViewById<TextView>(R.id.no_songs)
+        // Get the recyclerview with the songs and the textview with "no songs"
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view_all_songs)
+        val textViewNoSongs = findViewById<TextView>(R.id.no_songs)
 
-        // check API level to declare permission
+        // Create the songs list
+        val songsList = arrayListOf<AudioModel>()
+
+        // Check API level to declare permission
         val permission: String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             // For devices with API 33 (Tiramisu) and higher, use READ_MEDIA_AUDIO
             android.Manifest.permission.READ_MEDIA_AUDIO
@@ -60,11 +68,40 @@ class MainActivity : AppCompatActivity() {
             android.Manifest.permission.READ_EXTERNAL_STORAGE
         }
 
-        // check and request permission
+        // Check and request permission
         if (!checkPermission(permission)) {
             requestPermission(permission)
             return
         }
+
+        val projection = arrayOf(
+            MediaStore.Audio.Media.TITLE,
+            MediaStore.Audio.Media.DATA,
+            MediaStore.Audio.Media.DURATION
+        )
+
+        val selection: String = MediaStore.Audio.Media.IS_MUSIC +" != 0"
+
+        val cursor: Cursor? = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+            projection, selection, null, null)
+
+        // Fill the songs list and display
+        cursor?.use { cursor ->
+            while (cursor.moveToNext()) {
+                val songData = AudioModel(cursor.getString(1), cursor.getString(0), cursor.getString(2))
+                if(File(songData.path).exists()) {
+                    songsList.add(songData)
+                }
+            }
+            if (songsList.size == 0) {
+                textViewNoSongs.visibility = View.VISIBLE
+            } else {
+                //textViewNoSongs.visibility = View.GONE
+                recyclerView.layoutManager = LinearLayoutManager(this)
+            }
+
+        }
+
     }
 
     private fun checkPermission(permission: String): Boolean {
