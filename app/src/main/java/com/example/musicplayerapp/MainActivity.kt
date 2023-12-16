@@ -1,27 +1,21 @@
 package com.example.musicplayerapp
 
 import android.content.pm.PackageManager
-import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicplayerapp.databinding.ActivityMainBinding
 import com.example.musicplayerapp.ui.AudioModel
-import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.navigation_all_songs, R.id.navigation_playlists, R.id.navigation_artists
             )
         )
         if (navController != null) {
@@ -73,35 +67,6 @@ class MainActivity : AppCompatActivity() {
             requestPermission(permission)
             return
         }
-
-        val projection = arrayOf(
-            MediaStore.Audio.Media.TITLE,
-            MediaStore.Audio.Media.DATA,
-            MediaStore.Audio.Media.DURATION
-        )
-
-        val selection: String = MediaStore.Audio.Media.IS_MUSIC +" != 0"
-
-        val cursor: Cursor? = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-            projection, selection, null, null)
-
-        // Fill the songs list and display
-        cursor?.use { cursor ->
-            while (cursor.moveToNext()) {
-                val songData = AudioModel(cursor.getString(1), cursor.getString(0), cursor.getString(2))
-                if(File(songData.path).exists()) {
-                    songsList.add(songData)
-                }
-            }
-            if (songsList.size == 0) {
-                textViewNoSongs.visibility = View.VISIBLE
-            } else {
-                //textViewNoSongs.visibility = View.GONE
-                recyclerView.layoutManager = LinearLayoutManager(this)
-            }
-
-        }
-
     }
 
     private fun checkPermission(permission: String): Boolean {

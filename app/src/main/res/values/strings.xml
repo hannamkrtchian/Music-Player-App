@@ -5,4 +5,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="welcome_to_music_player">Welcome to Music Player!</string>
     <string name="oops_there_were_no_songs_found">Oops, there were no songs found on this device.</string>
+    <string name="all_songs">All songs</string>
+    <string name="playlists">Playlists</string>
+    <string name="artists">Artists</string>
 </resources>

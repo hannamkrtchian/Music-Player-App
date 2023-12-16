@@ -1,10 +1,10 @@
-package com.example.musicplayerapp.ui.notifications
+package com.example.musicplayerapp.ui.artists
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class NotificationsViewModel : ViewModel() {
+class ArtistsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is notifications Fragment"

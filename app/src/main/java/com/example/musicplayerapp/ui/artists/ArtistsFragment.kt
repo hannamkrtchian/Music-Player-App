@@ -1,4 +1,4 @@
-package com.example.musicplayerapp.ui.dashboard
+package com.example.musicplayerapp.ui.artists
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.musicplayerapp.databinding.FragmentDashboardBinding
+import com.example.musicplayerapp.databinding.FragmentArtistsBinding
 
-class DashboardFragment : Fragment() {
+class ArtistsFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentArtistsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,14 +22,14 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
+        val artistsViewModel =
+            ViewModelProvider(this).get(ArtistsViewModel::class.java)
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        _binding = FragmentArtistsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
+        val textView: TextView = binding.textNotifications
+        artistsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root
