@@ -1,6 +1,7 @@
 package com.example.musicplayerapp.ui.allSongs
 
 import android.database.Cursor
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,14 +10,15 @@ import java.io.File
 
 class AllSongsViewModel : ViewModel() {
 
-    private val _songsList = MutableLiveData<List<AudioModel>>()
-    val songsList: LiveData<List<AudioModel>> = _songsList
+    private val _songsList = MutableLiveData<ArrayList<AudioModel>>()
+    val songsList: LiveData<ArrayList<AudioModel>> = _songsList
 
     fun fetchSongs(cursor: Cursor?) {
         val songs = mutableListOf<AudioModel>()
-        cursor.use { cursor ->
-            if (cursor != null) {
-                while (cursor.moveToNext()) {
+
+        cursor?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                do {
                     val songData = AudioModel(
                         cursor.getString(1),
                         cursor.getString(0),
@@ -25,10 +27,11 @@ class AllSongsViewModel : ViewModel() {
                     if (File(songData.path).exists()) {
                         songs.add(songData)
                     }
-                }
+                } while (cursor.moveToNext())
             }
         }
 
-        _songsList.value = songs
+        _songsList.value = ArrayList(songs)
+        cursor?.close()
     }
 }
