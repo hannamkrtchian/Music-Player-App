@@ -33,16 +33,14 @@ class MusicListAdapter(private val songsList: ArrayList<AudioModel>,
         val songData: AudioModel = songsList[position]
         holder.titleTextView.text = songData.title
 
-        holder.itemView.setOnClickListener(View.OnClickListener {
-            fun onClick(view: View) {
+        holder.itemView.setOnClickListener {
                 // start other activity and pass songslist
                 MyMediaPlayer.getInstance().reset()
                 MyMediaPlayer.currentIndex = position
                 val intent = Intent(context, MusicPlayerActivity::class.java)
                 intent.putExtra("LIST", songsList)
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 context.startActivity(intent)
-            }
-        })
+        }
     }
 }
