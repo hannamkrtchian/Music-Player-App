@@ -15,7 +15,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicplayerapp.databinding.ActivityMainBinding
-import com.example.musicplayerapp.ui.AudioModel
 
 class MainActivity : AppCompatActivity() {
 

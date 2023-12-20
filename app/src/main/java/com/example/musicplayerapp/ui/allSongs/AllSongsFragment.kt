@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicplayerapp.R
 import com.example.musicplayerapp.databinding.FragmentAllSongsBinding
-import com.example.musicplayerapp.ui.AudioModel
-import com.example.musicplayerapp.ui.MusicListAdapter
+import com.example.musicplayerapp.AudioModel
+import com.example.musicplayerapp.MusicListAdapter
 
 class AllSongsFragment : Fragment() {
 

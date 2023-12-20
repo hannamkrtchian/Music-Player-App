@@ -1,13 +1,14 @@
-package com.example.musicplayerapp.ui
+package com.example.musicplayerapp
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.musicplayerapp.R
+import com.example.musicplayerapp.ui.MusicPlayerActivity
 
 class MusicListAdapter(private val songsList: ArrayList<AudioModel>,
                        private val context: Context
@@ -31,5 +32,17 @@ class MusicListAdapter(private val songsList: ArrayList<AudioModel>,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val songData: AudioModel = songsList[position]
         holder.titleTextView.text = songData.title
+
+        holder.itemView.setOnClickListener(View.OnClickListener {
+            fun onClick(view: View) {
+                // start other activity and pass songslist
+                MyMediaPlayer.getInstance().reset()
+                MyMediaPlayer.currentIndex = position
+                val intent = Intent(context, MusicPlayerActivity::class.java)
+                intent.putExtra("LIST", songsList)
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(intent)
+            }
+        })
     }
 }
