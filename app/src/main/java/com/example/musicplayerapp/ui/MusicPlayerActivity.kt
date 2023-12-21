@@ -9,6 +9,7 @@ import android.os.Looper
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import com.example.musicplayerapp.AudioModel
 import com.example.musicplayerapp.MyMediaPlayer
 import com.example.musicplayerapp.R
@@ -27,6 +28,8 @@ class MusicPlayerActivity : AppCompatActivity() {
     private lateinit var nextBtn: ImageView
     private lateinit var previousBtn: ImageView
     private lateinit var cover: ImageView
+    private lateinit var back: ImageView
+    private lateinit var artist: TextView
 
     private lateinit var currentSong: AudioModel
 
@@ -47,6 +50,13 @@ class MusicPlayerActivity : AppCompatActivity() {
         nextBtn= findViewById(R.id.next)
         previousBtn= findViewById(R.id.previous)
         cover= findViewById(R.id.cover_song)
+        back= findViewById(R.id.back_button)
+        artist= findViewById(R.id.song_artist)
+
+        // Back button logic
+        back.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         titleTv.isSelected = true
 

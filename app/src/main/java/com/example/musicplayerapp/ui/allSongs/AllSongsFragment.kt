@@ -1,5 +1,7 @@
 package com.example.musicplayerapp.ui.allSongs
 
+import android.content.ContentResolver
+import android.content.Context
 import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
@@ -15,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicplayerapp.R
 import com.example.musicplayerapp.databinding.FragmentAllSongsBinding
-import com.example.musicplayerapp.AudioModel
 import com.example.musicplayerapp.MusicListAdapter
 
 class AllSongsFragment : Fragment() {
@@ -27,16 +28,18 @@ class AllSongsFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    // Declare variables
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var textViewNoSongs: TextView
+    private lateinit var appContext: Context
+    private lateinit var contentResolver: ContentResolver
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val allSongsViewModel =
-            ViewModelProvider(this)[AllSongsViewModel::class.java]
-
         _binding = FragmentAllSongsBinding.inflate(inflater, container, false)
-
 
         return binding.root
     }
@@ -47,8 +50,8 @@ class AllSongsFragment : Fragment() {
         viewModel = ViewModelProvider(this)[AllSongsViewModel::class.java]
 
         // Get the recyclerview with the songs and the textview with "no songs"
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_all_songs)
-        val textViewNoSongs = view.findViewById<TextView>(R.id.no_songs)
+        recyclerView = view.findViewById(R.id.recycler_view_all_songs)
+        textViewNoSongs = view.findViewById(R.id.no_songs)
 
         // projection for cursor
         val projection = arrayOf(
@@ -60,12 +63,9 @@ class AllSongsFragment : Fragment() {
         // selection for cursor
         val selection: String = MediaStore.Audio.Media.IS_MUSIC + " != 0"
 
-        // declare contentResolver and appContext
-        val contentResolver = requireActivity().contentResolver
-        val appContext = requireContext().applicationContext
-
-
-        val songs = mutableListOf<AudioModel>()
+        // assign contentResolver and appContext
+        contentResolver = requireActivity().contentResolver
+        appContext = requireContext().applicationContext
 
         // cursor
         val cursor: Cursor? = contentResolver.query(

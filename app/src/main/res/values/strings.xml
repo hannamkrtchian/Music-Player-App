@@ -11,4 +11,11 @@
     <string name="title_of_the_song">Title of the song</string>
     <string name="_0_00">0:00</string>
     <string name="get_lyrics">Get lyrics</string>
+    <string name="cover">cover</string>
+    <string name="skip_next">skip next</string>
+    <string name="pause">pause</string>
+    <string name="skip_previous">skip previous</string>
+    <string name="artist">artist</string>
+    <string name="hyphen">-</string>
+    <string name="back_button">back button</string>
 </resources>
