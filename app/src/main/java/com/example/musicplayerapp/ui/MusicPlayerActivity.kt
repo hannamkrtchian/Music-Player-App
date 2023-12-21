@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
@@ -51,8 +53,39 @@ class MusicPlayerActivity : AppCompatActivity() {
         songsList= intent.getSerializable("LIST")
 
         setResourcesWithMusic()
-        
-    }
+
+        val handler = Handler(Looper.getMainLooper())
+
+        // Update seek bar & change play/pause button
+        val updateSeekBarRunnable = object : Runnable {
+            override fun run() {
+                if (mediaPlayer.isPlaying) {
+                    seekBar.progress = mediaPlayer.currentPosition
+                    currentTimeTv.text = convertToMMSS(mediaPlayer.currentPosition.toString())
+                    pausePlay.setImageResource(R.drawable.baseline_pause_circle_outline_24)
+                } else {
+                    pausePlay.setImageResource(R.drawable.baseline_play_circle_outline_24)
+                }
+                handler.postDelayed(this, 100)
+            }
+        }
+
+        // Start updating the seek bar
+        handler.postDelayed(updateSeekBarRunnable, 100)
+
+        // Change in progress of the seek bar
+        seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    mediaPlayer.seekTo(progress)
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        }
 
     private fun setResourcesWithMusic() {
         currentSong = songsList?.get(MyMediaPlayer.currentIndex)!!
