@@ -18,4 +18,5 @@
     <string name="artist">artist</string>
     <string name="hyphen">-</string>
     <string name="back_button">back button</string>
+    <string name="icon_cover">icon cover</string>
 </resources>

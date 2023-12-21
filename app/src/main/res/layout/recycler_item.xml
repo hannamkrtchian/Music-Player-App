@@ -14,16 +14,42 @@
         android:layout_height="36dp"
         android:id="@+id/icon_view"
         android:layout_centerVertical="true"
-        android:src="@drawable/baseline_music_note_24" />
+        android:src="@drawable/baseline_music_note_24"
+        android:contentDescription="@string/icon_cover" />
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/icon_view"
-        android:layout_marginStart="10dp"
-        android:id="@+id/music_title_text"
-        tools:text="Music"
-        android:textColor="@color/black"/>
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:id="@+id/music_title_text"
+            tools:text="Music"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/music_title_text"
+            android:layout_marginStart="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:id="@+id/hyphen"
+            tools:text="-"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/hyphen"
+            android:layout_marginStart="5dp"
+            android:id="@+id/music_artist_text"
+            tools:text="Artist"
+            android:textColor="@color/black"/>
+    </RelativeLayout>
 
 </RelativeLayout>

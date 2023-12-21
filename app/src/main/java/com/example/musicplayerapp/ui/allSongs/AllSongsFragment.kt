@@ -57,7 +57,8 @@ class AllSongsFragment : Fragment() {
         val projection = arrayOf(
             MediaStore.Audio.Media.TITLE,
             MediaStore.Audio.Media.DATA,
-            MediaStore.Audio.Media.DURATION
+            MediaStore.Audio.Media.DURATION,
+            MediaStore.Audio.Media.ARTIST
         )
 
         // selection for cursor

@@ -16,6 +16,7 @@ class MusicListAdapter(private val songsList: ArrayList<AudioModel>,
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var titleTextView: TextView = itemView.findViewById(R.id.music_title_text)
+        var artistTextView: TextView = itemView.findViewById(R.id.music_artist_text)
         var iconImageView: ImageView = itemView.findViewById(R.id.icon_view)
 
     }
@@ -32,6 +33,7 @@ class MusicListAdapter(private val songsList: ArrayList<AudioModel>,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val songData: AudioModel = songsList[position]
         holder.titleTextView.text = songData.title
+        holder.artistTextView.text = songData.artist
 
         holder.itemView.setOnClickListener {
                 // start other activity and pass songslist

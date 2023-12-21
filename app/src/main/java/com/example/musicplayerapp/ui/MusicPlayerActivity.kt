@@ -29,7 +29,7 @@ class MusicPlayerActivity : AppCompatActivity() {
     private lateinit var previousBtn: ImageView
     private lateinit var cover: ImageView
     private lateinit var back: ImageView
-    private lateinit var artist: TextView
+    private lateinit var artistTv: TextView
 
     private lateinit var currentSong: AudioModel
 
@@ -51,7 +51,7 @@ class MusicPlayerActivity : AppCompatActivity() {
         previousBtn= findViewById(R.id.previous)
         cover= findViewById(R.id.cover_song)
         back= findViewById(R.id.back_button)
-        artist= findViewById(R.id.song_artist)
+        artistTv= findViewById(R.id.song_artist)
 
         // Back button logic
         back.setOnClickListener {
@@ -100,6 +100,7 @@ class MusicPlayerActivity : AppCompatActivity() {
     private fun setResourcesWithMusic() {
         currentSong = songsList?.get(MyMediaPlayer.currentIndex)!!
         titleTv.text = currentSong.title
+        artistTv.text = currentSong.artist
         totalTimeTv.text = convertToMMSS(currentSong.duration)
 
         // click listeners

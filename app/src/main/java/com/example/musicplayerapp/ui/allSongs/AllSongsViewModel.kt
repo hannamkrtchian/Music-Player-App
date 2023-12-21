@@ -21,7 +21,8 @@ class AllSongsViewModel : ViewModel() {
                     val songData = AudioModel(
                         cursor.getString(1),
                         cursor.getString(0),
-                        cursor.getString(2)
+                        cursor.getString(2),
+                        cursor.getString(3)
                     )
                     if (File(songData.path).exists()) {
                         songs.add(songData)

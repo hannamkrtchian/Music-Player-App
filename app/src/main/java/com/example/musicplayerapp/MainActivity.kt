@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
             Toast.makeText(this,
                 "Permission is required to access music library, please allow from settings.",
-                Toast.LENGTH_SHORT).show()
+                Toast.LENGTH_LONG).show()
         } else {
             // Request permission
             ActivityCompat.requestPermissions(this, arrayOf(permission), 123)
