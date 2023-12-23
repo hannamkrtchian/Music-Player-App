@@ -1,6 +1,7 @@
 package com.example.musicplayerapp.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import com.bumptech.glide.Glide
 import com.example.musicplayerapp.AudioModel
 import com.example.musicplayerapp.MyMediaPlayer
 import com.example.musicplayerapp.R
@@ -104,6 +106,14 @@ class MusicPlayerActivity : AppCompatActivity() {
         currentSong = songsList?.get(MyMediaPlayer.currentIndex)!!
         titleTv.text = currentSong.title + " - " + currentSong.artist
         totalTimeTv.text = convertToMMSS(currentSong.duration)
+
+        // album art
+        val albumArtUri = Uri.parse(currentSong.albumArtUri)
+        Glide.with(this)
+            .load(albumArtUri)
+            .placeholder(R.drawable.baseline_music_note_24) // Placeholder image
+            .error(R.drawable.baseline_music_note_24) // Error image if loading fails
+            .into(cover)
 
         // click listeners
         pausePlay.setOnClickListener { pausePlay() }

@@ -3,9 +3,11 @@ package com.example.musicplayerapp
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -35,6 +37,14 @@ class MusicListAdapter(private val songsList: ArrayList<AudioModel>,
         val songData: AudioModel = songsList[position]
 
         holder.titleTextView.text = songData.title + " - " + songData.artist
+
+        // album art
+        val albumArtUri = Uri.parse(songData.albumArtUri)
+        Glide.with(context)
+            .load(albumArtUri)
+            .placeholder(R.drawable.baseline_music_note_24) // Placeholder image
+            .error(R.drawable.baseline_music_note_24) // Error image if loading fails
+            .into(holder.iconImageView)
 
         holder.itemView.setOnClickListener {
                 // start other activity and pass songslist

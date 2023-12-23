@@ -15,9 +15,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.musicplayerapp.MusicListAdapter
 import com.example.musicplayerapp.R
 import com.example.musicplayerapp.databinding.FragmentAllSongsBinding
-import com.example.musicplayerapp.MusicListAdapter
+import java.io.File
+
 
 class AllSongsFragment : Fragment() {
 
@@ -73,7 +75,7 @@ class AllSongsFragment : Fragment() {
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
             projection, selection, null, null)
 
-        viewModel.fetchSongs(cursor)
+        viewModel.fetchSongs(cursor, appContext)
 
         // Show "error" text view if there are no songs, otherwise list with songs
         viewModel.songsList.observe(viewLifecycleOwner) { songsList ->
@@ -82,7 +84,15 @@ class AllSongsFragment : Fragment() {
             } else {
                 textViewNoSongs.visibility = View.GONE
                 recyclerView.layoutManager = LinearLayoutManager(appContext)
-                recyclerView.adapter = MusicListAdapter(songsList, appContext)
+
+                // album art
+                songsList.forEach { song ->
+                    val file = File(song.path)
+                    val albumArtUri = viewModel.getArtUriFromMusicFile(appContext, file)
+                    song.albumArtUri = albumArtUri
+                }
+
+            recyclerView.adapter = MusicListAdapter(songsList, appContext)
             }
         }
     }
