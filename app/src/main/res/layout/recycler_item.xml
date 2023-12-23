@@ -4,8 +4,8 @@
     android:layout_height="wrap_content"
     android:background="@color/purple_200"
     android:layout_marginTop="5dp"
-    android:layout_marginRight="15dp"
-    android:layout_marginLeft="15dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginLeft="5dp"
     android:padding="10dp"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -17,39 +17,14 @@
         android:src="@drawable/baseline_music_note_24"
         android:contentDescription="@string/icon_cover" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:id="@+id/music_text"
+        tools:text="Music"
+        android:textColor="@color/black"
         android:layout_toEndOf="@+id/icon_view"
-        android:layout_centerVertical="true">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:id="@+id/music_title_text"
-            tools:text="Music"
-            android:textColor="@color/black"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/music_title_text"
-            android:layout_marginStart="5dp"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:id="@+id/hyphen"
-            tools:text="-"
-            android:textColor="@color/black"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/hyphen"
-            android:layout_marginStart="5dp"
-            android:id="@+id/music_artist_text"
-            tools:text="Artist"
-            android:textColor="@color/black"/>
-    </RelativeLayout>
+        android:layout_centerVertical="true"/>
 
 </RelativeLayout>

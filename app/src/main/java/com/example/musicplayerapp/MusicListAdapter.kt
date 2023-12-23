@@ -1,5 +1,6 @@
 package com.example.musicplayerapp
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -15,8 +16,7 @@ class MusicListAdapter(private val songsList: ArrayList<AudioModel>,
 ) : RecyclerView.Adapter<MusicListAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var titleTextView: TextView = itemView.findViewById(R.id.music_title_text)
-        var artistTextView: TextView = itemView.findViewById(R.id.music_artist_text)
+        var titleTextView: TextView = itemView.findViewById(R.id.music_text)
         var iconImageView: ImageView = itemView.findViewById(R.id.icon_view)
 
     }
@@ -30,10 +30,11 @@ class MusicListAdapter(private val songsList: ArrayList<AudioModel>,
         return songsList.size
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val songData: AudioModel = songsList[position]
-        holder.titleTextView.text = songData.title
-        holder.artistTextView.text = songData.artist
+
+        holder.titleTextView.text = songData.title + " - " + songData.artist
 
         holder.itemView.setOnClickListener {
                 // start other activity and pass songslist
