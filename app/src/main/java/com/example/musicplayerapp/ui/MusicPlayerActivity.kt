@@ -1,5 +1,6 @@
 package com.example.musicplayerapp.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -102,6 +103,7 @@ class MusicPlayerActivity : AppCompatActivity() {
 
         }
 
+    @SuppressLint("SetTextI18n")
     private fun setResourcesWithMusic() {
         currentSong = songsList?.get(MyMediaPlayer.currentIndex)!!
         titleTv.text = currentSong.title + " - " + currentSong.artist
@@ -109,11 +111,13 @@ class MusicPlayerActivity : AppCompatActivity() {
 
         // album art
         val albumArtUri = Uri.parse(currentSong.albumArtUri)
-        Glide.with(this)
-            .load(albumArtUri)
-            .placeholder(R.drawable.baseline_music_note_24) // Placeholder image
-            .error(R.drawable.baseline_music_note_24) // Error image if loading fails
-            .into(cover)
+        if (!isDestroyed && !isFinishing) {
+            Glide.with(this)
+                .load(albumArtUri)
+                .placeholder(R.drawable.baseline_music_note_24) // Placeholder image
+                .error(R.drawable.baseline_music_note_24) // Error image if loading fails
+                .into(cover)
+        }
 
         // click listeners
         pausePlay.setOnClickListener { pausePlay() }

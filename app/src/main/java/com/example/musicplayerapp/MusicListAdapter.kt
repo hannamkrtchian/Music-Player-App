@@ -36,7 +36,11 @@ class MusicListAdapter(private val songsList: ArrayList<AudioModel>,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val songData: AudioModel = songsList[position]
 
-        holder.titleTextView.text = songData.title + " - " + songData.artist
+        if (songData.artist.contains("unknown")) {
+            holder.titleTextView.text = songData.title
+        } else {
+            holder.titleTextView.text = songData.title + " - " + songData.artist
+        }
 
         // album art
         val albumArtUri = Uri.parse(songData.albumArtUri)
