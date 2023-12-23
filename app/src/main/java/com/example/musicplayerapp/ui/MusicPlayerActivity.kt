@@ -74,6 +74,11 @@ class MusicPlayerActivity : AppCompatActivity() {
                 } else {
                     pausePlay.setImageResource(R.drawable.baseline_play_circle_outline_24)
                 }
+
+                if (currentTimeTv.text == totalTimeTv.text) {
+                    playNextSong()
+                }
+
                 handler.postDelayed(this, 100)
             }
         }
