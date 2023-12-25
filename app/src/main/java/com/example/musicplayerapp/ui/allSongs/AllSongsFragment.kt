@@ -73,7 +73,8 @@ class AllSongsFragment : Fragment() {
         // cursor
         val cursor: Cursor? = contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-            projection, selection, null, null)
+            projection, selection, null,
+            MediaStore.Audio.Media.TITLE + " ASC")
 
         viewModel.fetchSongs(cursor, appContext)
 

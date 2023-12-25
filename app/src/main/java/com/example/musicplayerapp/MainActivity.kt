@@ -3,7 +3,6 @@ package com.example.musicplayerapp
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.example.musicplayerapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -44,13 +42,6 @@ class MainActivity : AppCompatActivity() {
         if (navController != null) {
             navView.setupWithNavController(navController)
         }
-
-        // Get the recyclerview with the songs and the textview with "no songs"
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view_all_songs)
-        val textViewNoSongs = findViewById<TextView>(R.id.no_songs)
-
-        // Create the songs list
-        val songsList = arrayListOf<AudioModel>()
 
         // Check API level to declare permission
         val permission: String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

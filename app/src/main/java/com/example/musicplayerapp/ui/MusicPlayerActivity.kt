@@ -101,7 +101,7 @@ class MusicPlayerActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
-        }
+    }
 
     @SuppressLint("SetTextI18n")
     private fun setResourcesWithMusic() {
