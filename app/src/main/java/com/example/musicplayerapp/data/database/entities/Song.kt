@@ -3,11 +3,12 @@ package com.example.musicplayerapp.data.database.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "playlist")
-data class Playlist(
+@Entity(tableName = "song")
+data class Song(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val name: String,
+    val title: String,
+    val artist: String
 
-    // relationship with songs
+    // relationship with playlist
 )
