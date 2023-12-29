@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.musicplayerapp.MusicApplication
 import com.example.musicplayerapp.R
 import com.example.musicplayerapp.data.database.PlaylistRepository
+import com.example.musicplayerapp.data.database.PlaylistSongCrossRefRepository
+import com.example.musicplayerapp.data.database.SongRepository
 import com.example.musicplayerapp.data.database.entities.Playlist
 import com.example.musicplayerapp.databinding.FragmentPlaylistsBinding
 import kotlinx.coroutines.launch
@@ -38,6 +40,8 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
     private lateinit var addPlaylistButton: Button
     private lateinit var appContext: Context
     private lateinit var playlistsRepository: PlaylistRepository
+    private lateinit var songsRepository: SongRepository
+    private lateinit var playlistSongCrossRefRepository: PlaylistSongCrossRefRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,7 +62,9 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
         super.onViewCreated(view, savedInstanceState)
 
         val application = requireActivity().application as MusicApplication
-        playlistsRepository = application.repository
+        playlistsRepository = application.playlistRepository
+        songsRepository = application.songRepository
+        playlistSongCrossRefRepository = application.playlistSongCrossRefRepository
 
         val viewModelFactory = PlaylistsViewModelFactory(playlistsRepository)
         viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistsViewModel::class.java]

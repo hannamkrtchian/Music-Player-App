@@ -15,8 +15,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.musicplayerapp.MusicApplication
 import com.example.musicplayerapp.MusicListAdapter
 import com.example.musicplayerapp.R
+import com.example.musicplayerapp.data.database.SongRepository
 import com.example.musicplayerapp.databinding.FragmentAllSongsBinding
 import java.io.File
 
@@ -35,6 +37,7 @@ class AllSongsFragment : Fragment() {
     private lateinit var textViewNoSongs: TextView
     private lateinit var appContext: Context
     private lateinit var contentResolver: ContentResolver
+    private lateinit var songsRepository: SongRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,6 +57,10 @@ class AllSongsFragment : Fragment() {
         // Get the recyclerview with the songs and the textview with "no songs"
         recyclerView = view.findViewById(R.id.recycler_view_all_songs)
         textViewNoSongs = view.findViewById(R.id.no_songs)
+
+        // declare repository for songs
+        val application = requireActivity().application as MusicApplication
+        songsRepository = application.songRepository
 
         // projection for cursor
         val projection = arrayOf(
@@ -76,7 +83,7 @@ class AllSongsFragment : Fragment() {
             projection, selection, null,
             MediaStore.Audio.Media.TITLE + " ASC")
 
-        viewModel.fetchSongs(cursor, appContext)
+        viewModel.fetchSongs(cursor, appContext, songsRepository)
 
         // Show "error" text view if there are no songs, otherwise list with songs
         viewModel.songsList.observe(viewLifecycleOwner) { songsList ->

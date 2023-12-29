@@ -10,8 +10,8 @@ class SongRepository(private val songDao: SongDao) {
     val allSongs: Flow<List<Song>> = songDao.getAllSongs()
 
     @WorkerThread
-    suspend fun insert(song: Song) {
-        songDao.insertSong(song)
+    suspend fun insertAll(songs: List<Song>) {
+        songDao.insertAll(songs)
     }
 
     @WorkerThread

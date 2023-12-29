@@ -8,7 +8,12 @@ import android.provider.MediaStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.musicplayerapp.AudioModel
+import com.example.musicplayerapp.data.database.SongRepository
+import com.example.musicplayerapp.data.database.entities.Song
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 class AllSongsViewModel : ViewModel() {
@@ -16,9 +21,9 @@ class AllSongsViewModel : ViewModel() {
     private val _songsList = MutableLiveData<ArrayList<AudioModel>>()
     val songsList: LiveData<ArrayList<AudioModel>> = _songsList
 
-    fun fetchSongs(cursor: Cursor?, context: Context) {
+    fun fetchSongs(cursor: Cursor?, context: Context, songRepository: SongRepository) {
         val songs = mutableListOf<AudioModel>()
-
+        val songsToDatabase = mutableListOf<Song>()
 
         cursor?.use { cursor ->
             if (cursor.moveToFirst()) {
@@ -35,9 +40,17 @@ class AllSongsViewModel : ViewModel() {
                     )
                     if (File(songData.path).exists()) {
                         songs.add(songData)
+                        // database
+                        val song = Song(0, songData.title, songData.artist)
+                        songsToDatabase.add(song)
                     }
                 } while (cursor.moveToNext())
             }
+        }
+
+        // Insert all songs accumulated in the list in a single batch to database
+        viewModelScope.launch(Dispatchers.IO) {
+            songRepository.insertAll(songsToDatabase)
         }
 
         _songsList.value = ArrayList(songs)

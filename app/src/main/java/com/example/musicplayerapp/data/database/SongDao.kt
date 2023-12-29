@@ -14,12 +14,12 @@ interface SongDao {
     @Query("SELECT * FROM song")
     fun getAllSongs(): Flow<List<Song>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSong(playlist: Song)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAll(songs: List<Song>)
 
     @Update
-    suspend fun updateSong(playlist: Song)
+    suspend fun updateSong(song: Song)
 
     @Delete
-    suspend fun deleteSong(playlist: Song)
+    suspend fun deleteSong(song: Song)
 }

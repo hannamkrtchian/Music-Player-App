@@ -5,10 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.musicplayerapp.data.database.entities.Playlist
+import com.example.musicplayerapp.data.database.entities.PlaylistSongCrossRef
+import com.example.musicplayerapp.data.database.entities.Song
 
-@Database(entities = [Playlist::class], version = 1, exportSchema = false)
+@Database(entities = [Playlist::class, Song::class, PlaylistSongCrossRef::class], version = 2, exportSchema = false)
 abstract class PlaylistDatabase : RoomDatabase() {
     abstract fun playlistDao(): PlaylistDao
+    abstract fun songDao(): SongDao
+    abstract fun playlistSongCrossRefDao(): PlaylistSongCrossRefDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the
