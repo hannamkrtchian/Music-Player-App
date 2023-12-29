@@ -31,7 +31,6 @@ class CreatePlaylistDialogFragment : DialogFragment() {
                     }
                     parentFragmentManager.setFragmentResult("requestKey", result)
                     dismiss()
-                    Log.d("TAG", "onCreateDialog: create $playlistName")
                 }
                 .setNegativeButton(R.string.cancel) { _, _ ->
                     dismiss()

@@ -77,7 +77,6 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
             // Set FragmentResultListener to handle the result after the dialog is dismissed
             setFragmentResultListener("requestKey") { _, result ->
                 val playlistName = result.getString("playlistName")
-                Log.d("TAG", "Received playlist name: $playlistName")
                 if (!playlistName.isNullOrEmpty()) {
                     onCreatePlaylist(playlistName)
                 }
@@ -93,8 +92,7 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
                     textViewNoPlaylists.visibility = View.GONE
 
                     val adapter = PlaylistAdapter(playlists, appContext)
-                    // After updating the dataset, notify the adapter
-                    //adapter.notifyDataSetChanged()
+
                     recyclerView.adapter = adapter
                     recyclerView.layoutManager = LinearLayoutManager(appContext)
                 } else {
@@ -110,9 +108,6 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
         if (name.isNotBlank()) {
             val playlist = Playlist(0, name)
             (viewModel as PlaylistsViewModel).insertPlaylist(playlist)
-            Log.d("onCreatePlaylist", "playlist is not blank")
-        } else {
-            Log.d("onCreatePlaylist", "playlist is!! blank")
         }
     }
 
