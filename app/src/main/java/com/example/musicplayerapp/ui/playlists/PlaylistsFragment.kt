@@ -2,12 +2,15 @@ package com.example.musicplayerapp.ui.playlists
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -45,6 +48,11 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appContext = context.applicationContext
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -62,9 +70,19 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
 
         // add playlist
         addPlaylistButton.setOnClickListener {
+
             val dialog = CreatePlaylistDialogFragment()
-            dialog.setTargetFragment(this, 0)
-            dialog.show(requireActivity().supportFragmentManager, "CreatePlaylistDialogFragment")
+
+            // Set FragmentResultListener to handle the result after the dialog is dismissed
+            setFragmentResultListener("requestKey") { _, result ->
+                val playlistName = result.getString("playlistName")
+                Log.d("TAG", "Received playlist name: $playlistName")
+                if (!playlistName.isNullOrEmpty()) {
+                    onCreatePlaylist(playlistName)
+                }
+            }
+
+            dialog.show(parentFragmentManager, "CreatePlaylistDialogFragment")
         }
 
         lifecycleScope.launch {
@@ -88,9 +106,9 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
         if (name.isNotBlank()) {
             val playlist = Playlist(0, name)
             (viewModel as PlaylistsViewModel).insertPlaylist(playlist)
+            Log.d("onCreatePlaylist", "playlist is not blank")
         } else {
-            // Handle case where playlist name is empty
-            // Show an error message or take appropriate action
+            Log.d("onCreatePlaylist", "playlist is!! blank")
         }
     }
 

@@ -25,5 +25,5 @@
     <string name="plus">+</string>
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
-    <string name="title_of_the_playlist">Title of the playlist</string>
+    <string name="title_of_the_playlist">Title</string>
 </resources>

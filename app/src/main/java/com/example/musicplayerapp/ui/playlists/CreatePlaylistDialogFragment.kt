@@ -2,8 +2,10 @@ package com.example.musicplayerapp.ui.playlists
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.example.musicplayerapp.R
 
 class CreatePlaylistDialogFragment : DialogFragment() {
@@ -24,11 +26,15 @@ class CreatePlaylistDialogFragment : DialogFragment() {
                 .setTitle(R.string.title_of_the_playlist)
                 .setPositiveButton(R.string.create) { _, _ ->
                     val playlistName = editTextPlaylistName.text.toString()
-                    val listener = activity as? CreatePlaylistDialogListener
-                    listener?.onCreatePlaylist(playlistName)
+                    val result = Bundle().apply {
+                        putString("playlistName", playlistName)
+                    }
+                    parentFragmentManager.setFragmentResult("requestKey", result)
+                    dismiss()
+                    Log.d("TAG", "onCreateDialog: create $playlistName")
                 }
                 .setNegativeButton(R.string.cancel) { _, _ ->
-                    dialog?.cancel()
+                    dismiss()
                 }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
