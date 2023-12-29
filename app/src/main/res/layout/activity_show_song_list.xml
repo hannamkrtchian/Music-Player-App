@@ -6,12 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".ui.allSongs.AllSongsFragment">
 
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/baseline_arrow_back_24"
+        android:contentDescription="@string/back_button" />
+
     <TextView
         android:id="@+id/playlist_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/back_button"
         android:padding="10dp"
-        android:layout_marginTop="30dp"
         android:text="@string/name_playlist"
         android:textColor="@color/black"
         android:textSize="25sp"
@@ -36,7 +46,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_songs_playlist"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playlist_name"
         android:layout_marginStart="20dp"
@@ -44,5 +54,15 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="40dp"
         android:padding="5dp" />
+
+    <ImageView
+        android:id="@+id/edit_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/baseline_edit_24"
+        android:contentDescription="@string/edit_button"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"/>
 
 </RelativeLayout>

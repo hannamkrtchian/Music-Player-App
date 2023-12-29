@@ -14,6 +14,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicplayerapp.MusicApplication
 import com.example.musicplayerapp.R
@@ -92,7 +93,10 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
                     textViewNoPlaylists.visibility = View.GONE
 
                     val adapter = PlaylistAdapter(playlists, appContext)
+                    // After updating the dataset, notify the adapter
+                    //adapter.notifyDataSetChanged()
                     recyclerView.adapter = adapter
+                    recyclerView.layoutManager = LinearLayoutManager(appContext)
                 } else {
                     recyclerView.visibility = View.GONE
                     textViewNoPlaylists.visibility = View.VISIBLE

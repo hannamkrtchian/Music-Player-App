@@ -17,7 +17,7 @@ class PlaylistAdapter(private val playlistList: List<Playlist>,
 ) : RecyclerView.Adapter<PlaylistAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var titleTextView: TextView = itemView.findViewById(R.id.playlist_text)
+        var titleTextView: TextView = itemView.findViewById(R.id.music_text)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,6 +42,5 @@ class PlaylistAdapter(private val playlistList: List<Playlist>,
             context.startActivity(intent)
         }
     }
-
 
 }
