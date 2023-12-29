@@ -1,11 +1,8 @@
 package com.example.musicplayerapp.ui.playlists
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.musicplayerapp.data.database.PlaylistDao
-import com.example.musicplayerapp.data.database.PlaylistDatabase
 import com.example.musicplayerapp.data.database.PlaylistRepository
 import com.example.musicplayerapp.data.database.entities.Playlist
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class PlaylistsViewModel(private val playlistRepository: PlaylistRepository) : ViewModel() {
 
-    private val allPlaylists: Flow<List<Playlist>> = playlistRepository.allPlaylists
+    val allPlaylists: Flow<List<Playlist>> = playlistRepository.allPlaylists
 
     fun insertPlaylist(playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -32,5 +29,15 @@ class PlaylistsViewModel(private val playlistRepository: PlaylistRepository) : V
         viewModelScope.launch(Dispatchers.IO) {
             playlistRepository.delete(playlist)
         }
+    }
+}
+
+class PlaylistsViewModelFactory(private val playlistRepository: PlaylistRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(PlaylistsViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return PlaylistsViewModel(playlistRepository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

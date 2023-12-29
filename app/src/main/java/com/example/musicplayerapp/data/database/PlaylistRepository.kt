@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 class PlaylistRepository(private val playlistDao: PlaylistDao) {
     // Room executes all queries on a separate thread.
     // Observed Flow will notify the observer when the data has changed.
-    val allPlaylists: Flow<List<Playlist>> = playlistDao.getAllPlaylists().asFlow()
+    val allPlaylists: Flow<List<Playlist>> = playlistDao.getAllPlaylists()
 
     @WorkerThread
     suspend fun insert(playlist: Playlist) {

@@ -1,8 +1,9 @@
 package com.example.musicplayerapp.data.database.entities
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.musicplayerapp.AudioModel
 
 @Entity(tableName = "playlist")
 data class Playlist(

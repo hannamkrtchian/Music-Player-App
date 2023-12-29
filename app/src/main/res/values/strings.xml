@@ -19,4 +19,11 @@
     <string name="hyphen">-</string>
     <string name="back_button">back button</string>
     <string name="icon_cover">icon cover</string>
+    <string name="your_playlists">Your playlists:</string>
+    <string name="oops_there_were_no_playlists_found">Oops there were no playlists found</string>
+    <string name="name_playlist">Name playlist</string>
+    <string name="plus">+</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_of_the_playlist">Title of the playlist</string>
 </resources>

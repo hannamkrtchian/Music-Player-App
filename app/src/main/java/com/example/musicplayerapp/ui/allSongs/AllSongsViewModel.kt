@@ -54,7 +54,7 @@ class AllSongsViewModel : ViewModel() {
         val cursor =
             context.applicationContext.contentResolver.query(uri, cursorCol, selection, selectionArgs, null)
 
-        // If the cusor count is greater than 0 then parse the data and get the art id.
+        // If the cursor count is greater than 0 then parse the data and get the art id.
         if (cursor != null && cursor.moveToFirst()) {
             val albumId = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID))
             val sArtworkUri = Uri.parse("content://media/external/audio/albumart")

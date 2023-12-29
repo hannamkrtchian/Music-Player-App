@@ -7,12 +7,12 @@
     tools:context=".ui.allSongs.AllSongsFragment">
 
     <TextView
-        android:id="@+id/welcome_text"
+        android:id="@+id/playlist_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:layout_marginTop="30dp"
-        android:text="@string/welcome_to_music_player"
+        android:text="@string/name_playlist"
         android:textColor="@color/black"
         android:textSize="25sp"
         android:layout_centerHorizontal="true" />
@@ -35,10 +35,10 @@
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_all_songs"
+        android:id="@+id/recycler_view_songs_playlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/welcome_text"
+        android:layout_below="@+id/playlist_name"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"

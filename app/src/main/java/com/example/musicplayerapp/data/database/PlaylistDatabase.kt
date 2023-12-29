@@ -1,4 +1,4 @@
-package com.example.musicplayerapp.data.database;
+package com.example.musicplayerapp.data.database
 
 import android.content.Context
 import androidx.room.Database
@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.musicplayerapp.data.database.entities.Playlist
 
-@Database(entities = [Playlist::class], version = 1)
+@Database(entities = [Playlist::class], version = 1, exportSchema = false)
 abstract class PlaylistDatabase : RoomDatabase() {
     abstract fun playlistDao(): PlaylistDao
 
@@ -23,8 +23,8 @@ abstract class PlaylistDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     PlaylistDatabase::class.java,
-                    "word_database"
-                ).build()
+                    "playlist_database",
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 // return instance
                 instance
