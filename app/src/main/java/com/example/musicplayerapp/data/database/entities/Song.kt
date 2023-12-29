@@ -9,6 +9,4 @@ data class Song(
     val id: Long = 0,
     val title: String,
     val artist: String
-
-    // relationship with playlist
 )
