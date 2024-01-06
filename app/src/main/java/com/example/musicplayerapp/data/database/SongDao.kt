@@ -22,4 +22,7 @@ interface SongDao {
 
     @Delete
     suspend fun deleteSong(song: Song)
+
+    @Query("SELECT id FROM song WHERE title = :title AND artist = :artist")
+    suspend fun getSongIdByTitleAndArtist(title: String, artist: String): Long?
 }

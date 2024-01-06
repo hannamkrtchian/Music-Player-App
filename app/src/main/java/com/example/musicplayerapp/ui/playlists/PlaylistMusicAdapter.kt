@@ -1,4 +1,4 @@
-package com.example.musicplayerapp
+package com.example.musicplayerapp.ui.playlists
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,19 +7,25 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import com.bumptech.glide.Glide
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.musicplayerapp.AudioModel
+import com.example.musicplayerapp.MyMediaPlayer
+import com.example.musicplayerapp.R
+import com.example.musicplayerapp.data.database.entities.Song
 import com.example.musicplayerapp.ui.MusicPlayerActivity
 
-class MusicListAdapter(private var songsList: ArrayList<AudioModel>,
-                       private val context: Context
-) : RecyclerView.Adapter<MusicListAdapter.ViewHolder>() {
+class PlaylistMusicListAdapter(private var songsList: List<Song>, private val context: Context
+) : RecyclerView.Adapter<PlaylistMusicListAdapter.ViewHolder>() {
+
+    private val checkedSongs: MutableList<Song> = mutableListOf()
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var titleTextView: TextView = itemView.findViewById(R.id.music_text)
-        var iconImageView: ImageView = itemView.findViewById(R.id.icon_view)
+        var checkBox: CheckBox = itemView.findViewById(R.id.checkBox)
 
     }
 
@@ -34,7 +40,7 @@ class MusicListAdapter(private var songsList: ArrayList<AudioModel>,
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val songData: AudioModel = songsList[position]
+        val songData: Song = songsList[position]
 
         if (songData.artist.contains("unknown")) {
             holder.titleTextView.text = songData.title
@@ -42,22 +48,18 @@ class MusicListAdapter(private var songsList: ArrayList<AudioModel>,
             holder.titleTextView.text = songData.title + " - " + songData.artist
         }
 
-        // album art
-        val albumArtUri = Uri.parse(songData.albumArtUri)
-        Glide.with(context)
-            .load(albumArtUri)
-            .placeholder(R.drawable.baseline_music_note_24) // Placeholder image
-            .error(R.drawable.baseline_music_note_24) // Error image if loading fails
-            .into(holder.iconImageView)
+        holder.checkBox.visibility = View.VISIBLE
 
-        holder.itemView.setOnClickListener {
-                // start other activity and pass songslist
-                MyMediaPlayer.getInstance().reset()
-                MyMediaPlayer.currentIndex = position
-                val intent = Intent(context, MusicPlayerActivity::class.java)
-                intent.putExtra("LIST", songsList)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                context.startActivity(intent)
+        holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                checkedSongs.add(songData)
+            } else {
+                checkedSongs.remove(songData)
+            }
         }
+    }
+
+    fun getCheckedSongs(): List<Song> {
+        return checkedSongs.toList()
     }
 }

@@ -13,6 +13,8 @@ import com.example.musicplayerapp.AudioModel
 import com.example.musicplayerapp.data.database.SongRepository
 import com.example.musicplayerapp.data.database.entities.Song
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -48,9 +50,18 @@ class AllSongsViewModel : ViewModel() {
             }
         }
 
-        // Insert all songs accumulated in the list in a single batch to database
+        // Check if songs already exist in the database, add only new songs
         viewModelScope.launch(Dispatchers.IO) {
-            songRepository.insertAll(songsToDatabase)
+            val existingSongs = songRepository.allSongs.firstOrNull()
+            val newSongs = existingSongs?.let { existing ->
+                songsToDatabase.filter { newSong ->
+                    existing.none { it.title == newSong.title && it.artist == newSong.artist }
+                }
+            } ?: songsToDatabase
+
+            if (newSongs.isNotEmpty()) {
+                songRepository.insertAll(newSongs)
+            }
         }
 
         _songsList.value = ArrayList(songs)

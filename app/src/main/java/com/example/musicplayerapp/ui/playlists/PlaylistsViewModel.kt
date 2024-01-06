@@ -4,12 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.musicplayerapp.data.database.PlaylistRepository
+import com.example.musicplayerapp.data.database.PlaylistSongCrossRefRepository
+import com.example.musicplayerapp.data.database.SongRepository
 import com.example.musicplayerapp.data.database.entities.Playlist
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class PlaylistsViewModel(private val playlistRepository: PlaylistRepository) : ViewModel() {
+class PlaylistsViewModel(private val playlistRepository: PlaylistRepository,
+                         private val songRepository: SongRepository) : ViewModel() {
 
     val allPlaylists: Flow<List<Playlist>> = playlistRepository.allPlaylists
 
@@ -30,13 +33,18 @@ class PlaylistsViewModel(private val playlistRepository: PlaylistRepository) : V
             playlistRepository.delete(playlist)
         }
     }
+
+    suspend fun getSongId(title: String, artist: String): Long? {
+        return songRepository.getSongId(title, artist)
+    }
 }
 
-class PlaylistsViewModelFactory(private val playlistRepository: PlaylistRepository) : ViewModelProvider.Factory {
+class PlaylistsViewModelFactory(private val playlistRepository: PlaylistRepository,
+                                private val songRepository: SongRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PlaylistsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return PlaylistsViewModel(playlistRepository) as T
+            return PlaylistsViewModel(playlistRepository, songRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

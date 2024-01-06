@@ -23,4 +23,8 @@ class SongRepository(private val songDao: SongDao) {
     suspend fun delete(song: Song) {
         songDao.deleteSong(song)
     }
+
+    suspend fun getSongId(title: String, artist: String): Long? {
+        return songDao.getSongIdByTitleAndArtist(title, artist)
+    }
 }
