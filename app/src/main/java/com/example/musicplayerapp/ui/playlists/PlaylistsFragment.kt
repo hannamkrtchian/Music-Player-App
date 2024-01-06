@@ -64,16 +64,18 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // repositories
         val application = requireActivity().application as MusicApplication
         playlistsRepository = application.playlistRepository
         songsRepository = application.songRepository
         playlistSongCrossRefRepository = application.playlistSongCrossRefRepository
 
+        // viewmodel
         val viewModelFactory = PlaylistsViewModelFactory(playlistsRepository, songsRepository)
         viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistsViewModel::class.java]
 
 
-        // Get the recyclerview with the playlists and the textview with "no playlists"
+        // Get the recyclerview with the playlists, the textview with "no playlists" and the add button
         recyclerView = view.findViewById(R.id.recycler_view_all_playlists)
         textViewNoPlaylists = view.findViewById(R.id.no_playlists)
         addPlaylistButton = view.findViewById(R.id.add_playlist)
@@ -98,6 +100,7 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
             dialog.show(parentFragmentManager, "CreatePlaylistDialogFragment")
         }
 
+        // show no playlists textview or playlists
         lifecycleScope.launch {
             (viewModel as PlaylistsViewModel).allPlaylists.collect { playlists ->
                 if (playlists.isNotEmpty()) {
