@@ -20,8 +20,8 @@
         android:id="@+id/playlist_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/back_button"
-        android:padding="10dp"
+        android:padding="5dp"
+        android:layout_marginTop="15dp"
         android:text="@string/name_playlist"
         android:textColor="@color/black"
         android:textSize="25sp"
@@ -49,10 +49,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playlist_name"
+        android:layout_above="@+id/edit_button"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="5dp"
         android:padding="5dp" />
 
     <ImageView

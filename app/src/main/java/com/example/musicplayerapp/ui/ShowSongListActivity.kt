@@ -5,6 +5,7 @@ import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,13 +21,17 @@ import com.example.musicplayerapp.data.database.PlaylistRepository
 import com.example.musicplayerapp.data.database.PlaylistSongCrossRefRepository
 import com.example.musicplayerapp.data.database.SongRepository
 import com.example.musicplayerapp.ui.allSongs.AllSongsViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.io.File
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class ShowSongListActivity : AppCompatActivity() {
-    var currentIndex: Int = -1
 
+    // variables
     private lateinit var back: ImageView
     private lateinit var titleTv: TextView
     private lateinit var recyclerView: RecyclerView
@@ -44,6 +49,8 @@ class ShowSongListActivity : AppCompatActivity() {
 
     // context
     private lateinit var context: Context
+
+    private val mainScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,32 +90,37 @@ class ShowSongListActivity : AppCompatActivity() {
             titleTv.text = playlistName
         }
 
+        loadSongsForPlaylist(playlistId)
 
-        val songsList = fetchSongsForPlaylist(playlistId)
+    }
 
-        if (songsList.isEmpty()) {
-            textViewNoSongs.visibility = View.VISIBLE
-        } else {
-            textViewNoSongs.visibility = View.GONE
-            recyclerView.layoutManager = LinearLayoutManager(context)
+    private fun loadSongsForPlaylist(playlistId: Long) {
+        mainScope.launch {
+            val songsList = fetchSongsForPlaylist(playlistId)
 
-            // album art
-            songsList.forEach { song ->
-                val file = File(song.path)
-                val albumArtUri = allSongsViewModel.getArtUriFromMusicFile(context, file)
-                song.albumArtUri = albumArtUri
+            if (songsList.isEmpty()) {
+                textViewNoSongs.visibility = View.VISIBLE
+            } else {
+                textViewNoSongs.visibility = View.GONE
+                recyclerView.layoutManager = LinearLayoutManager(context)
+
+                // album art
+                songsList.forEach { song ->
+                    val file = File(song.path)
+                    val albumArtUri = allSongsViewModel.getArtUriFromMusicFile(context, file)
+                    song.albumArtUri = albumArtUri
+                }
+
+                // convert to arraylist
+                // Assuming songsList is a List<AudioModel>
+                val arrayListSongs = ArrayList(songsList)
+
+                recyclerView.adapter = MusicListAdapter(arrayListSongs, context)
             }
-
-            // convert to arraylist
-            // Assuming songsList is a List<AudioModel>
-            val arrayListSongs = ArrayList(songsList)
-
-            recyclerView.adapter = MusicListAdapter(arrayListSongs, context)
         }
     }
 
-    private fun fetchSongsForPlaylist(playlistId: Long): List<AudioModel> {
-
+    private suspend fun fetchSongsForPlaylist(playlistId: Long): List<AudioModel> = suspendCoroutine { continuation ->
         val allSongs: MutableList<AudioModel> = mutableListOf()
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -118,10 +130,10 @@ class ShowSongListActivity : AppCompatActivity() {
             // Retrieve song titles and artists based on the song IDs
             val songsInfo = songIds.map { songId ->
                 val song = songRepository.getSongById(songId)
-                song.let {
-                    it?.let { it1 -> Pair(it1.title, it.artist) }
-                }
+                song?.let { Pair(it.title, it.artist) }
             }
+
+            val cursorList = mutableListOf<Cursor>()
 
             songsInfo.forEach { pair ->
                 val title = pair?.first
@@ -149,10 +161,17 @@ class ShowSongListActivity : AppCompatActivity() {
                 val cursor: Cursor? = contentResolver.query(
                     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     projection, selection, selectionArgs,
-                    MediaStore.Audio.Media.TITLE + " ASC")
+                    MediaStore.Audio.Media.TITLE + " ASC"
+                )
 
-                cursor?.use { cursor ->
+                cursor?.let { cursorList.add(it) }
+            }
+
+            // Process the retrieved song data after all cursors are available
+            cursorList.forEach { cursor ->
+                cursor.use { cursor ->
                     while (cursor.moveToNext()) {
+                        // Process song data and add it to allSongs list
                         val path = cursor.getString(1)
                         val file = File(path)
 
@@ -167,8 +186,13 @@ class ShowSongListActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
 
-        return allSongs.toList()
+            continuation.resume(allSongs.toList())
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainScope.cancel() // Cancel the CoroutineScope to avoid leaks
     }
 }
