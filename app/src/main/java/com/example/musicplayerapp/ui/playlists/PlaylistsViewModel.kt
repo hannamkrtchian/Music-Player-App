@@ -41,11 +41,15 @@ class PlaylistsViewModel(private val playlistRepository: PlaylistRepository,
     }
 
     suspend fun checkPlaylistExists(name: String): Boolean {
-        return playlistRepository.existingPlaylist(name).isNotEmpty()
+        return playlistRepository.existingPlaylist(name).isNotEmpty() && (playlistRepository.existingPlaylist(name)[0] != name)
     }
 
     suspend fun checkEntryExists(songId: Long, playlistId: Long): Boolean {
         return playlistSongCrossRefRepository.existingEntry(songId, playlistId).isNotEmpty()
+    }
+
+    suspend fun deleteSongsFromPlaylist(playlistId: Long) {
+        playlistSongCrossRefRepository.deleteAllSongsFromPlaylist(playlistId)
     }
 }
 

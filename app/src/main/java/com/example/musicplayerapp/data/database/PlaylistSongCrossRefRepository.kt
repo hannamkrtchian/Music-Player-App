@@ -8,9 +8,8 @@ class PlaylistSongCrossRefRepository(private val playlistSongCrossRefDao: Playli
         playlistSongCrossRefDao.insert(crossRef)
     }
 
-    suspend fun removeSongFromPlaylist(songId: Long, playlistId: Long) {
-        val crossRef = PlaylistSongCrossRef(playlistId, songId)
-        playlistSongCrossRefDao.delete(crossRef)
+    suspend fun deleteAllSongsFromPlaylist(playlistId: Long) {
+        playlistSongCrossRefDao.deleteAllSongsFromPlaylist(playlistId)
     }
 
     suspend fun getSongsForPlaylist(playlistId: Long): List<Long> {

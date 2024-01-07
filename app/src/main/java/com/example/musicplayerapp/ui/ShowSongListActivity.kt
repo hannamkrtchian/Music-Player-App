@@ -1,11 +1,11 @@
 package com.example.musicplayerapp.ui
 
+import android.app.AlertDialog
 import android.content.Context
 import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,7 +20,11 @@ import com.example.musicplayerapp.R
 import com.example.musicplayerapp.data.database.PlaylistRepository
 import com.example.musicplayerapp.data.database.PlaylistSongCrossRefRepository
 import com.example.musicplayerapp.data.database.SongRepository
+import com.example.musicplayerapp.data.database.entities.Song
 import com.example.musicplayerapp.ui.allSongs.AllSongsViewModel
+import com.example.musicplayerapp.ui.playlists.CreatePlaylistDialogFragment
+import com.example.musicplayerapp.ui.playlists.PlaylistsViewModel
+import com.example.musicplayerapp.ui.playlists.PlaylistsViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -44,8 +48,9 @@ class ShowSongListActivity : AppCompatActivity() {
     private lateinit var songRepository: SongRepository
     private lateinit var playlistSongCrossRefRepository: PlaylistSongCrossRefRepository
 
-    // viewmodel
+    // viewmodels
     private lateinit var allSongsViewModel: AllSongsViewModel
+    private lateinit var playlistsViewModel: PlaylistsViewModel
 
     // context
     private lateinit var context: Context
@@ -55,9 +60,6 @@ class ShowSongListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_song_list)
-
-        // viewmodel
-        allSongsViewModel = ViewModelProvider(this)[AllSongsViewModel::class.java]
 
         back = findViewById(R.id.back_button)
         titleTv = findViewById(R.id.playlist_name)
@@ -71,6 +73,13 @@ class ShowSongListActivity : AppCompatActivity() {
         playlistRepository = application.playlistRepository
         songRepository = application.songRepository
         playlistSongCrossRefRepository = application.playlistSongCrossRefRepository
+
+        // viewmodels
+        allSongsViewModel = ViewModelProvider(this)[AllSongsViewModel::class.java]
+        playlistsViewModel = ViewModelProvider(this, PlaylistsViewModelFactory(
+            playlistRepository,
+            songRepository,
+            playlistSongCrossRefRepository))[PlaylistsViewModel::class.java]
 
         // context
         context = this
@@ -88,11 +97,12 @@ class ShowSongListActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val playlistName: String = playlistRepository.getPlaylistNameById(playlistId)
             titleTv.text = playlistName
+
+            delete.setOnClickListener { deletePlaylist(playlistId) }
+            edit.setOnClickListener { openDialog(playlistId, playlistName) }
         }
 
         loadSongsForPlaylist(playlistId)
-
-        delete.setOnClickListener { deletePlaylist(playlistId) }
 
     }
 
@@ -114,7 +124,6 @@ class ShowSongListActivity : AppCompatActivity() {
                 }
 
                 // convert to arraylist
-                // Assuming songsList is a List<AudioModel>
                 val arrayListSongs = ArrayList(songsList)
 
                 recyclerView.adapter = MusicListAdapter(arrayListSongs, context)
@@ -196,12 +205,84 @@ class ShowSongListActivity : AppCompatActivity() {
     private fun deletePlaylist(playlistId: Long) {
         mainScope.launch {
             val playlist = playlistRepository.getPlaylist(playlistId)
-            playlistRepository.delete(playlist)
+            playlistsViewModel.deletePlaylist(playlist)
         }
 
         onBackPressedDispatcher.onBackPressed()
     }
 
+    private fun openDialog(playlistId: Long, playlistName: String) {
+        val dialog = CreatePlaylistDialogFragment()
+
+        dialog.setPlaylistName(playlistName)
+
+        // Set FragmentResultListener to handle the result after the dialog is dismissed
+        supportFragmentManager.setFragmentResultListener("requestKey", this) { _, result ->
+            val newPlaylistName = result.getString("playlistName")
+            // Retrieve the list of checked songs from the Bundle
+            val checkedSongs: List<Song>? = result.getSerializable("checkedSongs") as? List<Song>
+
+            lifecycleScope.launch {
+                when {
+                    newPlaylistName.isNullOrEmpty() -> showErrorDialog("Playlist name is empty. Please fill in a name.")
+                    playlistsViewModel.checkPlaylistExists(newPlaylistName) -> showErrorDialog("Playlist name '$playlistName' already exists. Please choose another name.")
+                    checkedSongs.isNullOrEmpty() -> showErrorDialog("No songs selected, please choose songs for this playlist")
+                    else -> updatePlaylist(playlistId, newPlaylistName, checkedSongs)
+                }
+            }
+        }
+
+        dialog.show(supportFragmentManager, "CreatePlaylistDialogFragment")
+    }
+
+    private fun updatePlaylist(id: Long, name: String, songs: List<Song>) {
+        mainScope.launch(Dispatchers.IO) {
+            val playlistToUpdate = playlistRepository.getPlaylist(id)
+
+            // Update playlist properties
+            playlistToUpdate.name = name
+            playlistsViewModel.updatePlaylist(playlistToUpdate)
+
+            // Delete all songs in a playlist
+            playlistsViewModel.deleteSongsFromPlaylist(id)
+
+            // Update songs in playlist
+            songs.forEach { song ->
+                // Retrieve song ID from the database and insert it into the cross-reference table
+                val songId = playlistsViewModel.getSongId(song.title, song.artist)
+                if (songId != null) {
+                    // Check if the entry already exists in PlaylistSongCrossRef
+                    val entryExists = playlistsViewModel.checkEntryExists(songId, id)
+                    if (!entryExists) {
+                        // Entry doesn't exist, so add it to the cross-reference table
+                        playlistSongCrossRefRepository.addSongToPlaylist(songId, id)
+                    }
+                }
+            }
+
+            // Reload the playlist title and songs
+            mainScope.launch(Dispatchers.Main) {
+                // Reload the playlist title
+                titleTv.text = name
+
+                // Reload songs for the updated playlist
+                loadSongsForPlaylist(id)
+            }
+        }
+    }
+
+
+    private fun showErrorDialog(message: String) {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setTitle("Error")
+        alertDialogBuilder.setMessage(message)
+        alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
 
     override fun onDestroy() {
         super.onDestroy()

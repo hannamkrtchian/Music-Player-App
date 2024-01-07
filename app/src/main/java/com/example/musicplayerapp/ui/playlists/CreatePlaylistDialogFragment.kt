@@ -11,13 +11,19 @@ import com.example.musicplayerapp.MusicApplication
 import com.example.musicplayerapp.R
 import com.example.musicplayerapp.data.database.entities.Song
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 
 class CreatePlaylistDialogFragment : DialogFragment() {
 
     interface CreatePlaylistDialogListener {
         fun onCreatePlaylist(name: String, songs: List<Song>)
+    }
+
+    // Only when editing a playlist
+    private var playlistName: String? = null
+
+    fun setPlaylistName(name: String) {
+        playlistName = name
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): AlertDialog {
@@ -49,6 +55,13 @@ class CreatePlaylistDialogFragment : DialogFragment() {
             }
         }
 
+        // set title according to situation
+        val title: String = if (playlistName.isNullOrEmpty()) {
+            "Title"
+        } else {
+            playlistName as String
+        }
+
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             builder.setView(dialogView)
@@ -69,6 +82,9 @@ class CreatePlaylistDialogFragment : DialogFragment() {
                 .setNegativeButton(R.string.cancel) { _, _ ->
                     dismiss()
                 }
+            // Set default value for editTextPlaylistName
+            editTextPlaylistName.setText(title)
+
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
