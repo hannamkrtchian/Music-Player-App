@@ -28,4 +28,7 @@ interface PlaylistDao {
 
     @Query("SELECT name FROM playlist WHERE name = :name")
     suspend fun existingPlaylist(name: String) : List<String>
+
+    @Query("SELECT * FROM playlist WHERE id = :id")
+    suspend fun getPlaylist(id: Long) : Playlist
 }

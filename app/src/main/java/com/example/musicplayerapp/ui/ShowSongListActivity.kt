@@ -92,6 +92,8 @@ class ShowSongListActivity : AppCompatActivity() {
 
         loadSongsForPlaylist(playlistId)
 
+        delete.setOnClickListener { deletePlaylist(playlistId) }
+
     }
 
     private fun loadSongsForPlaylist(playlistId: Long) {
@@ -190,6 +192,16 @@ class ShowSongListActivity : AppCompatActivity() {
             continuation.resume(allSongs.toList())
         }
     }
+
+    private fun deletePlaylist(playlistId: Long) {
+        mainScope.launch {
+            val playlist = playlistRepository.getPlaylist(playlistId)
+            playlistRepository.delete(playlist)
+        }
+
+        onBackPressedDispatcher.onBackPressed()
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()

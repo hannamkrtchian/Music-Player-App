@@ -31,4 +31,8 @@ class PlaylistRepository(private val playlistDao: PlaylistDao) {
     suspend fun existingPlaylist(name: String) : List<String> {
         return playlistDao.existingPlaylist(name)
     }
+
+    suspend fun getPlaylist(id: Long) : Playlist {
+        return playlistDao.getPlaylist(id)
+    }
 }
