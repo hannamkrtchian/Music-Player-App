@@ -1,5 +1,6 @@
 package com.example.musicplayerapp.ui.playlists
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -71,7 +72,7 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
         playlistSongCrossRefRepository = application.playlistSongCrossRefRepository
 
         // viewmodel
-        val viewModelFactory = PlaylistsViewModelFactory(playlistsRepository, songsRepository)
+        val viewModelFactory = PlaylistsViewModelFactory(playlistsRepository, songsRepository, playlistSongCrossRefRepository)
         viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistsViewModel::class.java]
 
 
@@ -80,7 +81,7 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
         textViewNoPlaylists = view.findViewById(R.id.no_playlists)
         addPlaylistButton = view.findViewById(R.id.add_playlist)
 
-        // add playlist
+        // add playlist button
         addPlaylistButton.setOnClickListener {
             val dialog = CreatePlaylistDialogFragment()
 
@@ -90,9 +91,12 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
                 // Retrieve the list of checked songs from the Bundle
                 val checkedSongs: List<Song>? = result.getSerializable("checkedSongs") as? List<Song>
 
-                if (!playlistName.isNullOrEmpty()) {
-                    if (checkedSongs != null) {
-                        onCreatePlaylist(playlistName, checkedSongs)
+                lifecycleScope.launch {
+                    when {
+                        playlistName.isNullOrEmpty() -> showErrorDialog("Playlist name is empty. Please fill in a name.")
+                        (viewModel as PlaylistsViewModel).checkPlaylistExists(playlistName) -> showErrorDialog("Playlist name '$playlistName' already exists. Please choose another name.")
+                        checkedSongs.isNullOrEmpty() -> showErrorDialog("No songs selected, please choose songs for this playlist")
+                        else -> onCreatePlaylist(playlistName, checkedSongs)
                     }
                 }
             }
@@ -135,12 +139,29 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
                         // Retrieve song ID from the database and insert it into the cross-reference table
                         val songId = (viewModel as PlaylistsViewModel).getSongId(song.title, song.artist)
                         if (songId != null) {
-                            playlistSongCrossRefRepository.addSongToPlaylist(songId, playlistId)
+                            // Check if the entry already exists in PlaylistSongCrossRef
+                            val entryExists = (viewModel as PlaylistsViewModel).checkEntryExists(songId, playlistId)
+                            if (!entryExists) {
+                                // Entry doesn't exist, so add it to the cross-reference table
+                                playlistSongCrossRefRepository.addSongToPlaylist(songId, playlistId)
+                            }
                         }
                     }
                 }
             }.launchIn(lifecycleScope)
         }
+    }
+
+    private fun showErrorDialog(message: String) {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("Error")
+        alertDialogBuilder.setMessage(message)
+        alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
     }
 
     override fun onDestroyView() {

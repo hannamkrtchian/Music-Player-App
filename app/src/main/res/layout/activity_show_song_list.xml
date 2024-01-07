@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="240dp"
         android:padding="15dp"
-        android:text="@string/oops_there_were_no_songs_found"
+        android:text="@string/no_songs_found_in_this_playlist"
         android:textAlignment="center"
         android:textColor="@color/design_default_color_error"
         android:visibility="gone"
@@ -61,8 +61,21 @@
         android:layout_height="50dp"
         android:src="@drawable/baseline_edit_24"
         android:contentDescription="@string/edit_button"
+        android:layout_toStartOf="@id/delete_button"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"/>
+
+    <ImageView
+        android:id="@+id/delete_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/baseline_delete_24"
+        android:contentDescription="@string/delete_button"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        app:tint="#F60808" />
 
 </RelativeLayout>

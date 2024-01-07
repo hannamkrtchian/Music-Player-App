@@ -3,6 +3,7 @@ package com.example.musicplayerapp.ui.playlists
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.musicplayerapp.MusicApplication
 import com.example.musicplayerapp.data.database.PlaylistRepository
 import com.example.musicplayerapp.data.database.PlaylistSongCrossRefRepository
 import com.example.musicplayerapp.data.database.SongRepository
@@ -12,7 +13,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class PlaylistsViewModel(private val playlistRepository: PlaylistRepository,
-                         private val songRepository: SongRepository) : ViewModel() {
+                         private val songRepository: SongRepository,
+                         private val playlistSongCrossRefRepository: PlaylistSongCrossRefRepository) : ViewModel() {
 
     val allPlaylists: Flow<List<Playlist>> = playlistRepository.allPlaylists
 
@@ -37,14 +39,23 @@ class PlaylistsViewModel(private val playlistRepository: PlaylistRepository,
     suspend fun getSongId(title: String, artist: String): Long? {
         return songRepository.getSongId(title, artist)
     }
+
+    suspend fun checkPlaylistExists(name: String): Boolean {
+        return playlistRepository.existingPlaylist(name).isNotEmpty()
+    }
+
+    suspend fun checkEntryExists(songId: Long, playlistId: Long): Boolean {
+        return playlistSongCrossRefRepository.existingEntry(songId, playlistId).isNotEmpty()
+    }
 }
 
 class PlaylistsViewModelFactory(private val playlistRepository: PlaylistRepository,
-                                private val songRepository: SongRepository) : ViewModelProvider.Factory {
+                                private val songRepository: SongRepository,
+                                private val playlistSongCrossRefRepository: PlaylistSongCrossRefRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PlaylistsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return PlaylistsViewModel(playlistRepository, songRepository) as T
+            return PlaylistsViewModel(playlistRepository, songRepository, playlistSongCrossRefRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

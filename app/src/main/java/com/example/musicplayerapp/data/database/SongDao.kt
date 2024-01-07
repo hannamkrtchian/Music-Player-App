@@ -17,12 +17,12 @@ interface SongDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(songs: List<Song>)
 
-    @Update
-    suspend fun updateSong(song: Song)
-
     @Delete
     suspend fun deleteSong(song: Song)
 
     @Query("SELECT id FROM song WHERE title = :title AND artist = :artist")
     suspend fun getSongIdByTitleAndArtist(title: String, artist: String): Long?
+
+    @Query("SELECT * FROM song WHERE id = :id")
+    suspend fun getSongById(id: Long): Song?
 }

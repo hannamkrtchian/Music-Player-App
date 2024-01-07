@@ -15,16 +15,15 @@ class SongRepository(private val songDao: SongDao) {
     }
 
     @WorkerThread
-    suspend fun update(song: Song) {
-        songDao.updateSong(song)
-    }
-
-    @WorkerThread
     suspend fun delete(song: Song) {
         songDao.deleteSong(song)
     }
 
     suspend fun getSongId(title: String, artist: String): Long? {
         return songDao.getSongIdByTitleAndArtist(title, artist)
+    }
+
+    suspend fun getSongById(id: Long) : Song? {
+        return songDao.getSongById(id)
     }
 }

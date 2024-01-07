@@ -16,4 +16,8 @@ class PlaylistSongCrossRefRepository(private val playlistSongCrossRefDao: Playli
     suspend fun getSongsForPlaylist(playlistId: Long): List<Long> {
         return playlistSongCrossRefDao.getSongsForPlaylist(playlistId)
     }
+
+    suspend fun existingEntry(songId: Long, playlistId: Long): List<Long> {
+        return playlistSongCrossRefDao.existingEntry(songId, playlistId)
+    }
 }

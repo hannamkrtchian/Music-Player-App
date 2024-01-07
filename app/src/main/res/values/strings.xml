@@ -27,4 +27,6 @@
     <string name="cancel">Cancel</string>
     <string name="title_of_the_playlist">Title</string>
     <string name="edit_button">edit button</string>
+    <string name="delete_button">delete button</string>
+    <string name="no_songs_found_in_this_playlist">Oops, there were no songs found in this playlist.</string>
 </resources>

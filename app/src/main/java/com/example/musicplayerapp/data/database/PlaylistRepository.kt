@@ -23,4 +23,12 @@ class PlaylistRepository(private val playlistDao: PlaylistDao) {
     suspend fun delete(playlist: Playlist) {
         playlistDao.deletePlaylist(playlist)
     }
+
+    suspend fun getPlaylistNameById(id: Long) : String {
+        return playlistDao.getPlaylistNameById(id)
+    }
+
+    suspend fun existingPlaylist(name: String) : List<String> {
+        return playlistDao.existingPlaylist(name)
+    }
 }
