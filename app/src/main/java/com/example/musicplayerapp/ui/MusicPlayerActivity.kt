@@ -8,14 +8,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
+import okhttp3.*
 import com.bumptech.glide.Glide
 import com.example.musicplayerapp.AudioModel
 import com.example.musicplayerapp.MyMediaPlayer
 import com.example.musicplayerapp.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.io.Serializable
 import java.util.concurrent.TimeUnit
@@ -32,6 +37,7 @@ class MusicPlayerActivity : AppCompatActivity() {
     private lateinit var previousBtn: ImageView
     private lateinit var cover: ImageView
     private lateinit var back: ImageView
+    private lateinit var getLyrics: Button
 
     private lateinit var currentSong: AudioModel
 
@@ -53,6 +59,7 @@ class MusicPlayerActivity : AppCompatActivity() {
         previousBtn= findViewById(R.id.previous)
         cover= findViewById(R.id.cover_song)
         back= findViewById(R.id.back_button)
+        getLyrics= findViewById(R.id.get_lyrics)
 
         // Back button logic
         back.setOnClickListener {
@@ -101,12 +108,23 @@ class MusicPlayerActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
+        getLyrics.setOnClickListener {
+            fetchLyrics()
+        }
+
     }
 
     @SuppressLint("SetTextI18n")
     private fun setResourcesWithMusic() {
         currentSong = songsList?.get(MyMediaPlayer.currentIndex)!!
-        titleTv.text = currentSong.title + " - " + currentSong.artist
+
+        // Title
+        if (currentSong.artist.contains("unknown")) {
+            titleTv.text = currentSong.title
+        } else {
+            titleTv.text = currentSong.title + " - " + currentSong.artist
+        }
+
         totalTimeTv.text = convertToMMSS(currentSong.duration)
 
         // album art
@@ -176,6 +194,47 @@ class MusicPlayerActivity : AppCompatActivity() {
             mediaPlayer.pause()
         } else {
             mediaPlayer.start()
+        }
+    }
+
+    private fun showLyricsDialog(lyrics: String) {
+        val dialogFragment = LyricsDialogFragment()
+        val bundle = Bundle().apply {
+            putString("lyrics", lyrics)
+        }
+        dialogFragment.arguments = bundle
+
+        dialogFragment.show(supportFragmentManager, "LyricsDialogFragment")
+    }
+
+    private fun fetchLyrics() {
+        // Call the suspend function within a coroutine scope
+        lifecycleScope.launch(Dispatchers.Main) {
+            val lyrics = fetchLyricsFromInternet(currentSong.title, currentSong.artist)
+            // Show the dialog with the lyrics
+            showLyricsDialog(lyrics)
+        }
+    }
+
+    private suspend fun fetchLyricsFromInternet(title: String, artist: String): String {
+        return withContext(Dispatchers.IO) {
+            val client = OkHttpClient()
+
+            val url = "https://api.lyrics.ovh/v1/$artist/$title"
+
+            val request = Request.Builder()
+                .url(url)
+                .build()
+
+            try {
+                val response = client.newCall(request).execute()
+                val responseBody = response.body?.string()
+
+                responseBody ?: ""
+            } catch (e: IOException) {
+                e.printStackTrace()
+                ""
+            }
         }
     }
 
