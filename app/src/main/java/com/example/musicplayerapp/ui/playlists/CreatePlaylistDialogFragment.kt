@@ -57,7 +57,7 @@ class CreatePlaylistDialogFragment : DialogFragment() {
 
         // set title according to situation
         val title: String = if (playlistName.isNullOrEmpty()) {
-            "Title"
+            getString(R.string.title_of_the_playlist)
         } else {
             playlistName as String
         }
@@ -65,7 +65,7 @@ class CreatePlaylistDialogFragment : DialogFragment() {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             builder.setView(dialogView)
-                .setTitle(R.string.title_of_the_playlist)
+                .setTitle(getString(R.string.title_of_the_playlist))
                 .setPositiveButton(R.string.create) { _, _ ->
                     val playlistName = editTextPlaylistName.text.toString()
                     val checkedSongs = (selectSongsRecyclerView.adapter as PlaylistMusicListAdapter).getCheckedSongs()

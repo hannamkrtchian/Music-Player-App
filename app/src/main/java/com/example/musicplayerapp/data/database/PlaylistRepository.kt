@@ -28,7 +28,7 @@ class PlaylistRepository(private val playlistDao: PlaylistDao) {
         return playlistDao.getPlaylistNameById(id)
     }
 
-    suspend fun existingPlaylist(name: String) : List<String> {
+    suspend fun existingPlaylist(name: String) : Playlist? {
         return playlistDao.existingPlaylist(name)
     }
 

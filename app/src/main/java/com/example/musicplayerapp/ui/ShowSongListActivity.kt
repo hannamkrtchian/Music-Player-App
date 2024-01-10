@@ -224,9 +224,10 @@ class ShowSongListActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 when {
-                    newPlaylistName.isNullOrEmpty() -> showErrorDialog("Playlist name is empty. Please fill in a name.")
-                    playlistsViewModel.checkPlaylistExists(newPlaylistName) -> showErrorDialog("Playlist name '$playlistName' already exists. Please choose another name.")
-                    checkedSongs.isNullOrEmpty() -> showErrorDialog("No songs selected, please choose songs for this playlist")
+                    newPlaylistName.isNullOrEmpty() -> showErrorDialog(R.string.playlist_name_empty)
+                    (playlistsViewModel.checkPlaylistExists(newPlaylistName) != null
+                            && playlistsViewModel.checkPlaylistExists(newPlaylistName)?.name != newPlaylistName) -> showErrorDialog(R.string.playlist_name_exists)
+                    checkedSongs.isNullOrEmpty() -> showErrorDialog(R.string.no_songs_selected)
                     else -> updatePlaylist(playlistId, newPlaylistName, checkedSongs)
                 }
             }
@@ -272,10 +273,10 @@ class ShowSongListActivity : AppCompatActivity() {
     }
 
 
-    private fun showErrorDialog(message: String) {
+    private fun showErrorDialog(messageResId: Int) {
         val alertDialogBuilder = AlertDialog.Builder(this)
-        alertDialogBuilder.setTitle("Error")
-        alertDialogBuilder.setMessage(message)
+        alertDialogBuilder.setTitle(getString(R.string.error))
+        alertDialogBuilder.setMessage(getString(messageResId))
         alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
             dialog.dismiss()
         }

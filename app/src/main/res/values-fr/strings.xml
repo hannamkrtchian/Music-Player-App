@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Music Player App</string>
+    <string name="welcome_to_music_player">Bienvenue dans Music Player !</string>
+    <string name="oops_there_were_no_songs_found">Oops, nous n\'avons pas trouvé de chansons sur votre appareil.</string>
+    <string name="all_songs">Toutes chansons</string>
+    <string name="playlists">Playlists</string>
+    <string name="artists">Artistes</string>
+    <string name="title_of_the_song">Titre de la chanson</string>
+    <string name="get_lyrics">Trouver les paroles</string>
+    <string name="artist">Artiste</string>
+    <string name="back_button">bouton retour</string>
+    <string name="your_playlists">Vos playlists:</string>
+    <string name="oops_there_were_no_playlists_found">Oops, nous n\'avons pas trouvé de playlists.</string>
+    <string name="name_playlist">Nom de la playlist</string>
+    <string name="create">Créer</string>
+    <string name="cancel">Annuler</string>
+    <string name="title_of_the_playlist">Titre</string>
+    <string name="edit_button">bouton changer</string>
+    <string name="delete_button">bouton supprimer</string>
+    <string name="no_songs_found_in_this_playlist">Oops, nous n\'avons pas trouvé de chansons dans cette playlist.</string>
+    <string name="back">Retour</string>
+    <string name="lyrics_text_view">text view paroles</string>
+    <string name="lyrics_not_available">On n\'a pas pu trouver les paroles de cette chanson.</string>
+    <string name="error">Erreur</string>
+    <string name="playlist_name_empty">Le nom de la playlist est vide.</string>
+    <string name="playlist_name_exists">Le nom de la playlist existe déjà. Choisissez un autre nom.</string>
+    <string name="no_songs_selected">Vous n\'avez pas choisi de chansons pour la playlist.</string>
+    <string name="permission_required">Nous avons besoin de votre permission pour accéder à votre musique, veuillez accepter dans les paramètres.</string>
+</resources>

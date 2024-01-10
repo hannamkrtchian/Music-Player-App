@@ -1,36 +1,38 @@
 <resources>
     <string name="app_name">Music Player App</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="welcome_to_music_player">Welcome to Music Player!</string>
     <string name="oops_there_were_no_songs_found">Oops, there were no songs found on this device.</string>
     <string name="all_songs">All songs</string>
     <string name="playlists">Playlists</string>
     <string name="artists">Artists</string>
     <string name="title_of_the_song">Title of the song</string>
-    <string name="_0_00">0:00</string>
+    <string name="_0_00" translatable="false">0:00</string>
     <string name="get_lyrics">Get lyrics</string>
-    <string name="cover">cover</string>
-    <string name="skip_next">skip next</string>
-    <string name="pause">pause</string>
-    <string name="skip_previous">skip previous</string>
-    <string name="artist">artist</string>
-    <string name="hyphen">-</string>
-    <string name="back_button">back button</string>
-    <string name="icon_cover">icon cover</string>
+    <string name="cover" translatable="false">cover</string>
+    <string name="skip_next" translatable="false">skip next</string>
+    <string name="pause" translatable="false">pause</string>
+    <string name="skip_previous" translatable="false">skip previous</string>
+    <string name="artist">Artist</string>
+    <string name="hyphen" translatable="false">-</string>
+    <string name="icon_cover" translatable="false">icon cover</string>
     <string name="your_playlists">Your playlists:</string>
-    <string name="oops_there_were_no_playlists_found">Oops there were no playlists found</string>
+    <string name="oops_there_were_no_playlists_found">Oops, there were no playlists found.</string>
     <string name="name_playlist">Name playlist</string>
-    <string name="plus">+</string>
+    <string name="plus" translatable="false">+</string>
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
     <string name="title_of_the_playlist">Title</string>
     <string name="edit_button">edit button</string>
     <string name="delete_button">delete button</string>
     <string name="no_songs_found_in_this_playlist">Oops, there were no songs found in this playlist.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="back">Back</string>
     <string name="lyrics_text_view">lyrics text view</string>
+    <string name="back_button">back button</string>
+    <string name="lyrics_not_available">We couldn\'t find the lyrics you are looking for.</string>
+    <string name="error">Error</string>
+    <string name="playlist_name_empty">Playlist name is empty. Please fill in a name.</string>
+    <string name="playlist_name_exists">Playlist name already exists. Please choose another name.</string>
+    <string name="no_songs_selected">No songs selected, please choose songs for this playlist.</string>
+    <string name="permission_required">Permission is required to access music library, please allow from settings.</string>
 </resources>

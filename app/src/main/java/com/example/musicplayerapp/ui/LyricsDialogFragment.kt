@@ -54,7 +54,7 @@ class LyricsDialogFragment : DialogFragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
+
     private fun displayLyrics(jsonLyrics: String?) {
         val lyrics = jsonLyrics?.let { extractLyricsFromJson(it) }
 
@@ -65,7 +65,8 @@ class LyricsDialogFragment : DialogFragment() {
             // Set the lyrics to the TextView
             lyricsTextView?.text = fromHtml(formattedLyrics)
         } else {
-            lyricsTextView?.text = "Lyrics not available"
+            val lyricsNotAvailable = getString(R.string.lyrics_not_available)
+            lyricsTextView?.text = lyricsNotAvailable
         }
     }
 

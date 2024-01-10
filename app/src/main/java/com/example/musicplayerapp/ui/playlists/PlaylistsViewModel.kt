@@ -40,8 +40,8 @@ class PlaylistsViewModel(private val playlistRepository: PlaylistRepository,
         return songRepository.getSongId(title, artist)
     }
 
-    suspend fun checkPlaylistExists(name: String): Boolean {
-        return playlistRepository.existingPlaylist(name).isNotEmpty() && (playlistRepository.existingPlaylist(name)[0] != name)
+    suspend fun checkPlaylistExists(name: String): Playlist? {
+        return playlistRepository.existingPlaylist(name)
     }
 
     suspend fun checkEntryExists(songId: Long, playlistId: Long): Boolean {

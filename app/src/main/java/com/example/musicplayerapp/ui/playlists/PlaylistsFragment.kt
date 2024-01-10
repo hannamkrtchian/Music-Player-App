@@ -93,9 +93,9 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
 
                 lifecycleScope.launch {
                     when {
-                        playlistName.isNullOrEmpty() -> showErrorDialog("Playlist name is empty. Please fill in a name.")
-                        (viewModel as PlaylistsViewModel).checkPlaylistExists(playlistName) -> showErrorDialog("Playlist name '$playlistName' already exists. Please choose another name.")
-                        checkedSongs.isNullOrEmpty() -> showErrorDialog("No songs selected, please choose songs for this playlist")
+                        playlistName.isNullOrEmpty() -> showErrorDialog(R.string.playlist_name_empty)
+                        ((viewModel as PlaylistsViewModel).checkPlaylistExists(playlistName) != null) -> showErrorDialog(R.string.playlist_name_exists)
+                        checkedSongs.isNullOrEmpty() -> showErrorDialog(R.string.no_songs_selected)
                         else -> onCreatePlaylist(playlistName, checkedSongs)
                     }
                 }
@@ -152,10 +152,10 @@ class PlaylistsFragment : Fragment(), CreatePlaylistDialogFragment.CreatePlaylis
         }
     }
 
-    private fun showErrorDialog(message: String) {
+    private fun showErrorDialog(messageResId: Int) {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
-        alertDialogBuilder.setTitle("Error")
-        alertDialogBuilder.setMessage(message)
+        alertDialogBuilder.setTitle(getString(R.string.error))
+        alertDialogBuilder.setMessage(getString(messageResId))
         alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
             dialog.dismiss()
         }
