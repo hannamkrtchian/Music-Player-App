@@ -23,7 +23,7 @@ class ArtistsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val artistsViewModel =
-            ViewModelProvider(this).get(ArtistsViewModel::class.java)
+            ViewModelProvider(this)[ArtistsViewModel::class.java]
 
         _binding = FragmentArtistsBinding.inflate(inflater, container, false)
         val root: View = binding.root
