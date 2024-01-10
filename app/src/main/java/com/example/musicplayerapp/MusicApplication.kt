@@ -8,8 +8,7 @@ import com.example.musicplayerapp.data.database.SongRepository
 
 class MusicApplication : Application() {
 
-    lateinit var playlistDatabase: PlaylistDatabase
-        private set
+    private lateinit var playlistDatabase: PlaylistDatabase
 
     lateinit var playlistRepository: PlaylistRepository
         private set
