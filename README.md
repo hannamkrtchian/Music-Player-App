@@ -8,6 +8,7 @@ Frameworks and libraries used:
 - kotlinx.coroutines for asynchronously retrieving data from the database and fetching lyrics from the internet.
 
 To use the app, music must be available on the device, stored under the 'music' folder. If music is downloaded, it needs to be moved to this folder first.
+Note: on some Android API's (for example API 24 and 25) it is not possible to access or move files in the intern storage. This means that the app will work, but the songs will not show.
 
 Tutorial used to access music from the device and play/pause music, etc:
 - Music Player Application | Android Studio Tutorial | 2024 - https://www.youtube.com/watch?v=1D1Jo1sLBMo 
