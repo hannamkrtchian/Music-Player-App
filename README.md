@@ -26,7 +26,7 @@ Tutorial used to access music from the device and play/pause music, etc:
 
 ## UI classes:
 
-- all songs
+1. all songs
   - AllSongsFragment
 
 First we get the recyclerview and the text view “no songs” from the layout. Then we make a projection (song data that has to be stored in AudioModel) and a selection (only music) to use in “cursor”. Then we call the function “fetchSongs”, that is located in the AllSongsViewModel, with this cursor. This function fills the songsList with the songs found on the device. Then we observe the songsList. If it’s empty we make the textView “no songs” visible. Else we add to each song in the list the album art (cover) of the song and then we fill the recycler view by calling the MusicListAdapter (see further).
@@ -37,11 +37,11 @@ The “fetchSongs” function takes a cursor and a context to fetch the songs on
 
 The “getArtUriFromMusicFile” function takes a context and a file to return a string of the album art uri.
 
-- artists
+2. artists
 
 Has not been implemented because the logic is similar to the playlists folder.
 
-- playlists
+3. playlists
   - CreatePlaylistDialogFragment
 
 In this Fragment, the song list is fetched, and a dialog is generated. Within the dialog, there is an input field for defining the playlist title, along with a RecyclerView displaying the available songs. Each song is accompanied by a checkbox. Upon clicking "Create", the selected name and checked songs are transmitted back to the originating activity or fragment within a Bundle named "result".
@@ -62,11 +62,11 @@ In the PlaylistsFragment, the user's created playlists are displayed, along with
 
 The PlaylistsViewModel contains methods to interact with the repositories to get, insert, update or delete data from the database.
 
-- LyricsDialogFragment
+4. LyricsDialogFragment
 
 The LyricsDialogFragment is responsible for presenting the lyrics of a song. It contains the "displayLyrics" method, which initially calls the "extractLyricsFromJson" method. Then, it formats the lyrics for improved readability. The "extractLyricsFromJson" method transforms the JSON object into a string containing only the text of the lyrics.
 
-- MusicPlayerActivity
+5. MusicPlayerActivity
 
 Music Player Activity is the activity to play, pause, skip, etc. the music. It contains the logic for the “back” button, the seek bar, and setting resources related to the music.
 
@@ -83,7 +83,7 @@ showLyricsDialog: generates a LyricsDialogFragment and sends the lyrics within a
 fetchLyrics: invokes "fetchLyricsFromInternet" within a coroutine scope and subsequently calls "showLyricsDialog".
 fetchLyricsFromInternet: uses the OkHttpClient to request lyrics from lyrics.ovh with the parameters “title” and “artist”
 
-- ShowSongListActivity
+6. ShowSongListActivity
 
 This activity is designed to display songs within a specific playlist. It accomplishes this by invoking the MusicListAdapter, providing it with a list of songs associated with the playlist. The "fetchSongsForPlaylist" method utilizes the PlaylistSongCrossRefRepository to retrieve song IDs from the PlaylistSongCrossRef table corresponding to the playlist. Using these song IDs, the method obtains the title and artist information for each song from the Song table and subsequently fetches the corresponding songs from the device based on their titles and artists.
 
@@ -91,35 +91,35 @@ The "openDialog" function is responsible for creating the CreatePlaylistDialogFr
 
 ## Data classes (room):
 
-- entities
+1. entities
   - Playlist: a Playlist with an ID and a name
   - PlaylistSongCrossRef: many to many relationship between song and playlist
   - Song: a song with an ID, title and artist
-- PlaylistDao
+2. PlaylistDao
 
 This class provides a set of methods for the retrieval, insertion, updating, and deletion of playlists. The "getPlaylistNameById" method accepts a playlist ID and exclusively returns the name of the associated playlist. The "existingPlaylist" method determines the existence of a playlist with a given name, taking the playlist name as input and returning the playlist if it already exists. Lastly, the "getPlaylist" method retrieves the entire playlist based on the provided playlist ID.
 
-- PlaylistDatabase
+3. PlaylistDatabase
 
 This class defines the Room Database for the application, including the entities and their corresponding DAOs. It incorporates the Singleton pattern to ensure a single, thread-safe instance of the database is used throughout the application.
 
-- PlaylistRepository
+4. PlaylistRepository
 
 This class is an abstraction layer between the data access operations and the rest of the application. It encapsulates the logic for interacting with playlists, providing a clean API for the rest of the application to perform operations on the playlists.
 
-- PlaylistSongCrossRefDao
+5. PlaylistSongCrossRefDao
 
 This class offers methods for inserting and deleting entries. The "getSongsForPlaylist" method, given a playlist ID, retrieves all associated song IDs for that playlist. The "existingEntry" method checks the existence of an entry with a given playlist ID and song ID. It returns a list containing the playlist ID if the entry already exists. Additionally, the "deleteAllSongsFromPlaylist" method, when provided with a playlist ID, removes all entries associated with that playlist.
 
-- PlaylistSongCrossRefRepository
+6. PlaylistSongCrossRefRepository
 
 This repository class abstracts away the details of database operations related to playlist-song associations, providing a clear and straightforward interface for the application to manage these relationships.
 
-- SongDao
+7. SongDao
 
 This class offers methods for getting, inserting and deleting songs. The "getSongIdByTitleAndArtist" method, given a title and artist, retrieves the associated song ID. The "getSongById" method takes a song ID and returns a song.
 
-- SongRepository
+8. SongRepository
 
 This class provides a high-level interface for working with songs, handling database operations, and exposing observed data changes through a Flow.
 
