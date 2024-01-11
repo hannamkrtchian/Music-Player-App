@@ -2,21 +2,14 @@ package com.example.musicplayerapp.ui.playlists
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import com.bumptech.glide.Glide
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.musicplayerapp.AudioModel
-import com.example.musicplayerapp.MyMediaPlayer
 import com.example.musicplayerapp.R
 import com.example.musicplayerapp.data.database.entities.Song
-import com.example.musicplayerapp.ui.MusicPlayerActivity
 
 class PlaylistMusicListAdapter(private var songsList: List<Song>, private val context: Context
 ) : RecyclerView.Adapter<PlaylistMusicListAdapter.ViewHolder>() {
