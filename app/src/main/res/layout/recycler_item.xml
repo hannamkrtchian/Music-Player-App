@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/purple_200"
+    android:layout_marginLeft="5dp"
     android:layout_marginTop="5dp"
     android:layout_marginRight="5dp"
-    android:layout_marginLeft="5dp"
-    android:padding="10dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="#EADDFF"
+    android:padding="10dp">
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -17,22 +17,22 @@
         android:visibility="gone" />
 
     <ImageView
+        android:id="@+id/icon_view"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:id="@+id/icon_view"
         android:layout_centerVertical="true"
-        android:src="@drawable/baseline_music_note_24"
+        android:layout_toEndOf="@+id/checkBox"
         android:contentDescription="@string/icon_cover"
-        android:layout_toEndOf="@+id/checkBox"/>
+        android:src="@drawable/baseline_music_note_24" />
 
     <TextView
+        android:id="@+id/music_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginStart="10dp"
-        android:id="@+id/music_text"
-        tools:text="Music"
-        android:textColor="@color/black"
         android:layout_toEndOf="@+id/icon_view"
-        android:layout_centerVertical="true"/>
+        android:textColor="@color/black"
+        tools:text="Music" />
 
 </RelativeLayout>
