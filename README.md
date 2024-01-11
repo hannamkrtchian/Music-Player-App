@@ -30,7 +30,7 @@ Tutorial used to access music from the device and play/pause music, etc:
 1. all songs
   - AllSongsFragment
 
-First we get the recyclerview and the text view “no songs” from the layout. Then we make a projection (song data that has to be stored in AudioModel) and a selection (only music) to use in “cursor”. Then we call the function “fetchSongs”, that is located in the AllSongsViewModel, with this cursor. This function fills the songsList with the songs found on the device. Then we observe the songsList. If it’s empty we make the textView “no songs” visible. Else we add to each song in the list the album art (cover) of the song and then we fill the recycler view by calling the MusicListAdapter (see further).
+Firstly, the RecyclerView and the "no songs" TextView are retrieved from the layout. Following that, a projection (containing song data intended for storage in AudioModel) and a selection (restricted to music only) are established for use in the "cursor". Afterwards, the "fetchSongs" function, located in the AllSongsViewModel, is invoked with this cursor. This function populates the songsList with the songs identified on the device. The songsList is then observed, and if it is empty, the "no songs" TextView is made visible. Conversely, if there are songs, each song in the list will get its respective album art (cover). Finally, the RecyclerView is populated by invoking the MusicListAdapter.
 
   - AllSongsViewModel
 
