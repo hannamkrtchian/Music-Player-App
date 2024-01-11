@@ -8,18 +8,18 @@
     <fragment
         android:id="@+id/navigation_all_songs"
         android:name="com.example.musicplayerapp.ui.allSongs.AllSongsFragment"
-        android:label="All songs"
+        android:label="@string/all_songs"
         tools:layout="@layout/fragment_all_songs" />
 
     <fragment
         android:id="@+id/navigation_playlists"
         android:name="com.example.musicplayerapp.ui.playlists.PlaylistsFragment"
-        android:label="Playlists"
+        android:label="@string/playlists"
         tools:layout="@layout/fragment_playlists" />
 
     <fragment
         android:id="@+id/navigation_artists"
         android:name="com.example.musicplayerapp.ui.artists.ArtistsFragment"
-        android:label="Artists"
+        android:label="@string/artists"
         tools:layout="@layout/fragment_artists" />
 </navigation>
